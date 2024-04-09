@@ -31,7 +31,7 @@ function AddEvent() {
       </div>
       <div>
         <label>Date</label>
-        <input type="text" onChange={(e)=>setDate(e.target.value)} />
+        <input type="date" onChange={(e)=>{setDate(e.target.value) ;console.log(e.target.value)}} />
       </div>
       <div>
         <label>Description</label>
