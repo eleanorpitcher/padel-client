@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +7,7 @@ function Signup() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
@@ -17,8 +17,7 @@ function Signup() {
     let newUser = {
       email: email,
       username: username,
-      firstName: firstName,
-      lastName: lastName,
+      name: name,
       password: password,
     };
 
@@ -59,21 +58,11 @@ function Signup() {
         </label>
 
         <label>
-          First Name
+          Name
           <input
             type="text"
             onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-          />
-        </label>
-
-        <label>
-          Last Name
-          <input
-            type="text"
-            onChange={(e) => {
-              setLastName(e.target.value);
+              setName(e.target.value);
             }}
           />
         </label>

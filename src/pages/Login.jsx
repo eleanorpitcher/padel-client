@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/auth.context";
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const { authenticateUser } = useContext(AuthContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +21,8 @@ function Login() {
     axios
       .post("http://localhost:5005/auth/login", reqBody)
       .then((result) => {
-        console.log("jwt token", result.data.authToken);
+        localStorage.setItem("authToken", result.data.authToken);
+        authenticateUser();
         navigate("/");
       })
       .catch((err) => {
