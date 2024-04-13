@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Link, NavLink } from "react-router-dom";
 import { useState, useContext } from "react";
 import logo from "../assets/Logo1Transparent2.png";
@@ -16,7 +17,9 @@ function Navbar() {
             <NavLink to="/events">Events</NavLink>
             <NavLink to="/new-event">Add an event</NavLink>
             <NavLink to="/profile/:id">User Profile</NavLink>
-            <NavLink to='/'><button onClick={logOutUser}>Log out</button></NavLink>
+            <NavLink to="/">
+              <button onClick={logOutUser}>Log out</button>
+            </NavLink>
             <span>{user && user.name}</span>
           </>
         )}
