@@ -4,7 +4,7 @@ import logo from "../assets/Logo1Transparent2.png";
 import { AuthContext } from "../context/auth.context";
 
 function Navbar() {
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
 
   return (
     <div className="bg-green3_color  flex w-full sticky top-0 justify-between flex-wrap pt-4">
@@ -16,7 +16,8 @@ function Navbar() {
             <NavLink to="/events">Events</NavLink>
             <NavLink to="/new-event">Add an event</NavLink>
             <NavLink to="/profile/:id">User Profile</NavLink>
-            <button>Log out</button>
+            <NavLink to='/'><button onClick={logOutUser}>Log out</button></NavLink>
+            <span>{user && user.name}</span>
           </>
         )}
 
