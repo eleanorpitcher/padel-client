@@ -35,6 +35,11 @@ function AllEvents() {
         <button onClick={() => setUpcomingEvents(true)}  className={`btn-green-1 px-4 py-2 rounded-lg mb-2 ${!upcomingEvents ? 'btn-white' : ''}`}>Upcoming Events</button>
         <button onClick={() => setUpcomingEvents(false)} className={`btn-green-1 px-4 py-2 rounded-lg mb-2 mx-2 ${upcomingEvents ? 'btn-white' : ''}`}>Past Events</button>
       </div>
+      <div>
+      {!upcomingEvents && (
+        <button>Year</button>)
+      }
+      </div>
       <Link to={'/new-event'}><button className={`btn-green-2 px-4 py-2 rounded-lg mb-2`}>Create your own event!</button></Link>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
