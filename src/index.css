@@ -3,11 +3,28 @@
 @tailwind utilities;
 
 .btn-green-1{
-    background-color: #84C318;
-    color: white
-  }
+  background-color: #84C318;
+  color: white
+}
+
+.btn-green-2{
+  background-color: #84C318;
+  color: white
+}
+
+.btn-green-2:hover{
+  /* background-color: #F5FBEF; */
+  color: black;
+  transform: 0.5s;
+}
+
   
-  .btn-white{
-    background-color: #F5FBEF;
-    color: black
-  }
+.btn-white{
+  background-color: #F5FBEF;
+  color: black
+}
+
+.btn-white:hover{
+  background-color: #84C318;
+  color: white
+}

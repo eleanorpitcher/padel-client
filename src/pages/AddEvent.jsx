@@ -1,15 +1,24 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 
 function AddEvent() {
+  const { user } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
 
-  const newEvent = { name, date, description };
+  const newEvent = {
+    name,
+    date,
+    description,
+    organizer: user._id,
+    participants: [user._id],
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
