@@ -18,23 +18,41 @@ function OneEvent() {
   },[id])
 
   return (
-    <div>
-    {event && 
-      <div key={event._id}>
-        <h1>{event.name}</h1>
-        <p>{event.date}</p>
-        <p>{event.description}</p>
-        <ul>
-        {event.participants.map((oneParticipant, index)=>(
-            <li key={index}>
-              {oneParticipant.name}
-            </li>
-        ))}
-        </ul>
+    <div className="flex">
+      {event &&
+      <div className="w-2/3 p-4">
+          <div key={event._id}>
+            <h1 className='font-bold text-5xl mb-2' >{event.name}</h1>
+            <p className='text-2xl mb-2'>{event.description}</p>
+            <button>Sign up</button>
+          </div>
       </div>
-    }
-  </div>
-  )
+      }
+      {event && 
+      <div className="w-1/3 p-4">
+        <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <h2 className="text-lg font-bold mb-2">Organised by:</h2>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <h2 className="text-lg font-bold mb-2">{event.date}</h2>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-4">
+          <h2 className="text-lg font-bold mb-2">Participants</h2>
+          <ul>
+              {event.participants.map((oneParticipant, index)=>(
+                <li key={index}>
+                  {oneParticipant.name}
+                  {/* {oneParticipant.profilePhoto} */}
+                </li>
+              ))}
+            </ul>
+        </div>
+
+      </div>
+      }
+    </div>
+  );
+  
 }
 
 export default OneEvent
