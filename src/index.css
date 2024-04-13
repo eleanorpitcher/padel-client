@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-green-1{
+    background-color: #84C318;
+    color: white
+  }
+  
+  .btn-white{
+    background-color: #F5FBEF;
+    color: black
+  }
