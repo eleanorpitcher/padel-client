@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { useContext } from 'react';
 
 function OneEvent() {
 
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
   const [event,setEvent] = useState(null)
   const {id} = useParams()
   const storedToken = localStorage.getItem('authToken')
@@ -53,13 +55,24 @@ function OneEvent() {
         </div>
         <div className="bg-white rounded-lg shadow-md p-4">
           <h2 className="text-lg font-bold mb-2">Participants</h2>
+
+        {isLoggedIn &&( 
           <ul>
-              {event.participants.map((oneParticipant, index)=>(
-                <li key={index}>
-                  {oneParticipant.username}
-                </li>
-              ))}
-            </ul>
+          {event.participants.map((oneParticipant, index)=>(
+            <li key={index}>
+              {oneParticipant.username}
+            </li>
+          ))}
+        </ul>
+        )}
+          {!isLoggedIn &&(
+            
+
+
+
+          )}
+
+
         </div>
 
       </div>
