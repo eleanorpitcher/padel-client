@@ -65,12 +65,7 @@ function OneEvent() {
           ))}
         </ul>
         )}
-          {!isLoggedIn &&(
-            
-
-
-
-          )}
+        
 
 
         </div>
