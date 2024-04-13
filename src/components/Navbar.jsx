@@ -15,8 +15,8 @@ function Navbar() {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/events">Events</NavLink>
             <NavLink to="/new-event">Add an event</NavLink>
-
             <NavLink to="/profile/:id">User Profile</NavLink>
+            <button>Log out</button>
           </>
         )}
 
@@ -25,7 +25,6 @@ function Navbar() {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/events">Events</NavLink>
             <NavLink to="/login">Log In</NavLink>
-
             <NavLink to="/signup">Sign Up</NavLink>
           </>
         )}

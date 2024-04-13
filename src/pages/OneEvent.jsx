@@ -6,6 +6,7 @@ function OneEvent() {
 
   const [event,setEvent] = useState(null)
   const {id} = useParams()
+  const storedToken = localStorage.getItem('authToken')
 
   useEffect(()=>{
     axios.get(`http://localhost:5005/api/events/${id}`)
@@ -17,6 +18,19 @@ function OneEvent() {
     })
   },[id])
 
+
+  function joinEvent(){
+    axios.put(`http://localhost:5005/api/events/${id}/join`, {}, {headers: {Authorization: `Bearer ${storedToken}`}} )
+    .then((updatedEvent)=>{
+      setEvent(updatedEvent.data)
+      console.log('success')
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+
   return (
     <div className="flex">
       {event &&
@@ -24,7 +38,8 @@ function OneEvent() {
           <div key={event._id}>
             <h1 className='font-bold text-5xl mb-2' >{event.name}</h1>
             <p className='text-2xl mb-2'>{event.description}</p>
-            <button>Sign up</button>
+            {storedToken && <p>You're already signed up!</p>}
+            {!storedToken &&<button onClick={joinEvent}>Sign up</button>}
           </div>
       </div>
       }
@@ -41,8 +56,7 @@ function OneEvent() {
           <ul>
               {event.participants.map((oneParticipant, index)=>(
                 <li key={index}>
-                  {oneParticipant.name}
-                  {/* {oneParticipant.profilePhoto} */}
+                  {oneParticipant.username}
                 </li>
               ))}
             </ul>
