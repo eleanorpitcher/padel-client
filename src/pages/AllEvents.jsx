@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import dateFormat, { masks } from "dateformat";
+import { AuthContext } from "../context/auth.context";
 
 
 function AllEvents() {
   const [events, setEvents] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(2024)
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+
 
   const [upcomingEvents, setUpcomingEvents] = useState(true)
   const currentDate = new Date()
@@ -13,13 +17,15 @@ function AllEvents() {
 
   const filteredEvents = upcomingEvents
   ? events.filter(event => new Date(event.date) > currentDate) : events.filter(event => new Date(event.date) < currentDate)
-
+  
 
   useEffect(() => {
     axios
       .get("http://localhost:5005/api/events")
       .then((allEvents) => {
         setEvents(allEvents.data);
+        const sortedDates = allEvents.data.map(event => event.date).map(date => new Date(date)).sort((a,b)=> a-b).map(date => date.toISOString().slice(0, 10))
+        console.log(sortedDates) //figure out how to sort by events
       })
       .catch((err) => {
         console.log(err);
@@ -37,10 +43,15 @@ function AllEvents() {
       </div>
       <div>
       {!upcomingEvents && (
-        <button>Year</button>)
-      }
+        <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+        </select>
+      )}
       </div>
-      <Link to={'/new-event'}><button className={`btn-green-2 px-4 py-2 rounded-lg mb-2`}>Create your own event!</button></Link>
+      {isLoggedIn && (
+        <Link to={'/new-event'}><button className={`btn-green-2 px-4 py-2 rounded-lg mb-2`}>Create your own event!</button></Link>
+      )}
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {filteredEvents.map((oneEvent) => {
