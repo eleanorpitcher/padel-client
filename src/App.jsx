@@ -9,6 +9,8 @@ import Navbar from "./components/Navbar";
 import UserProfile from "./pages/UserProfile";
 
 import { Route, Routes } from "react-router-dom";
+import Scoreboard from "./components/Scoreboard";
+import ScoreboardPage from "./pages/ScoreboardPage";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
         <Route element={<Login />} path="/login"></Route>
         <Route element={<Signup />} path="/signup"></Route>
         <Route element={<UserProfile />} path="/profile/:id"></Route>
+        <Route element={<ScoreboardPage/>} path="/scoreboard"></Route>
       </Routes>
     </>
   );
