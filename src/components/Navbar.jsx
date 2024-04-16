@@ -16,7 +16,9 @@ function Navbar() {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/events">Events</NavLink>
             <NavLink to="/new-event">Add an event</NavLink>
-            <NavLink to="/profile/:id">User Profile</NavLink>
+
+
+            <NavLink to="/scoreboard">Scoreboard</NavLink>
             <NavLink to="/">
               <button onClick={logOutUser}>Log out</button>
             </NavLink>

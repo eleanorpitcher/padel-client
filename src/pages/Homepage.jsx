@@ -70,9 +70,7 @@ function Homepage() {
           At Padel4All, you can create your own padel event with ease!
           Set up the date, time, and participant list through our user-friendly platform.
           Whether for competition or social play, manage and customize your event to enjoy padel your way.
-          Start planning today and bring the padel community together 
-
-           at your own event!</p>
+          Start planning today and bring the padel community together at your own event!</p>
       </div>
 
 
