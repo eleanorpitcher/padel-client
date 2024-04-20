@@ -7,12 +7,12 @@ html{
 }
 
 .btn-green-1{
-  background-color: #84C318;
+  background-color: #A4B7A4;
   color: white
 }
 
 .btn-green-2{
-  background-color: #84C318;
+  background-color:#A4B7A4;
   color: white
 }
 
@@ -29,7 +29,7 @@ html{
 }
 
 .btn-white:hover{
-  background-color: #84C318;
+  background-color: #A4B7A4;
   color: white
 }
 
@@ -46,6 +46,12 @@ html{
 .login-btn{
   border-color: #A4B7A4;
   width: 200px;
+  border-radius: 20px
+}
+
+.year-btn{
+  border-color: #A4B7A4;
+  width: 120px;
   border-radius: 20px
 }
 
