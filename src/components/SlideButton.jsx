@@ -1,7 +1,7 @@
 function SlideButton() {
   return (
     <div>
-      <button className="group relative inline-flex items-center justify-center overflow-hidden border-2 border-olive_color p-4 px-24 py-4 font-medium text-indigo-600 shadow-md transition duration-300 ease-out ">
+      <button className="group relative inline-flex items-center justify-center overflow-hidden border-2 border-olive_color p-4 px-20 py-4 text-2xl font-semibold  shadow-md transition duration-300 ease-out ">
         <span className="ease absolute inset-0 flex h-full w-full -translate-x-full items-center justify-center bg-olive_color text-white_color duration-300 group-hover:translate-x-0 ">
           <svg
             className="h-6 w-6"
@@ -18,7 +18,7 @@ function SlideButton() {
             ></path>
           </svg>
         </span>
-        <span className="ease absolute flex h-full w-full transform items-center justify-center text-olive_color transition-all duration-300 group-hover:translate-x-full ">
+        <span className="ease absolute flex h-full w-full transform items-center justify-center text-olive_color transition-all duration-300 group-hover:translate-x-full  ">
           Log In
         </span>
         <span className="invisible relative">Button Text</span>

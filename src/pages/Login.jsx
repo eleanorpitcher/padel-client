@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
@@ -32,18 +32,22 @@ function Login() {
       });
   };
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   return (
-    <div
-      className="flex flex-row text-center justify-around bg-white_color items-center h-screen"
-      style={{ height: "85vh" }}
-    >
-      <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-row text-center justify-around bg-white_color items-center h-screen overflow-hidden -mt-16">
+      <div className="flex flex-col  items-center ">
         <img src="../../public/loginimg.png" alt="" className="w-96" />
         <h1 className="text-olive_color text-6xl font-bold">
           Together we play better!
         </h1>
       </div>
-      <div className="mt-5 w-2/5 ">
+      <div className="w-2/5 ">
         <form
           action=""
           onSubmit={handleSubmit}
