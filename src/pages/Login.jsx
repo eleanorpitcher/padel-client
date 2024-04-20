@@ -33,7 +33,10 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-row text-center justify-around h-screen  bg-white_color items-center">
+    <div
+      className="flex flex-row text-center justify-around bg-white_color items-center h-screen"
+      style={{ height: "85vh" }}
+    >
       <div className="flex flex-col justify-center items-center">
         <img src="../../public/loginimg.png" alt="" className="w-96" />
         <h1 className="text-olive_color text-6xl font-bold">
