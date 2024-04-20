@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from 'react-router-dom';
+
 function Homepage() {
 
   const [events, setEvents] = useState([])
@@ -45,8 +46,8 @@ function Homepage() {
                 <h3>{new Date(event.date).toLocaleDateString()}</h3>
                 <p>{event.description}</p>
                 <p>Participants: {event.participants.length}</p>
-               <Link to={`/events/${event._id}`}> 
-               <button className="bg-gray-400 px-3 py-1 rounded-lg">Join</button>
+                <Link to={`/events/${event._id}`}>
+                  <button className="bg-gray-400 px-3 py-1 rounded-lg">Join</button>
                 </Link>
               </div>
             ))
@@ -56,15 +57,15 @@ function Homepage() {
 
         </div>
         <Link to={'/events'}>
-        <h1 className='text-4xl font-extrabold pt-2 pb-10'>See more events</h1>
+          <h1 className='text-4xl font-extrabold pt-2 pb-10'>See more events</h1>
         </Link>
 
 
       </div>
 
       <div className='w-3/6 flex flex-col justify-center items-center pb-10 '>
-      <Link to={'/new-event'}>
-        <button className='text-4xl font-extrabold pt-4 px-3 py-4 bg-blue-50 rounded-lg hover:bg-blue-600  border-2 border-black'>Create you own event</button>
+        <Link to={'/new-event'}>
+          <button className='text-4xl font-extrabold pt-4 px-3 py-4 bg-blue-50 rounded-lg hover:bg-blue-600  border-2 border-black'>Create you own event</button>
         </Link>
         <p className='text-center mt-4'>
           At Padel4All, you can create your own padel event with ease!

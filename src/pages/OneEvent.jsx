@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
+import { Link } from "react-router-dom";
 
 function OneEvent() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -75,7 +76,12 @@ function OneEvent() {
                 <li>{event.participants.length}</li>
               </ul>
             )}
+
           </div>
+
+          <div>
+              <Link to={`/events/${id}/results`}><button>Results</button></Link>
+            </div>
         </div>
       )}
     </div>
