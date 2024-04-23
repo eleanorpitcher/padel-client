@@ -101,7 +101,7 @@ function Homepage() {
                 <p>Participants: {event.participants.length}</p>
                 <div className="flex justify-center">
                   <Link to={`/events/${event._id}`}>
-                    <button className="p-3 mt-5 join-btn" style={{}}>
+                    <button className="p-3 mt-5 join-btn">
                       Join
                     </button>
                   </Link>
