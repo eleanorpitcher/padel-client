@@ -45,21 +45,21 @@ function UserProfile() {
   return (
     <>
       {user && (
-        <div className="flex flex-col justify-center items-center gap-4">
-          <div className="flex flex-row items-center w-full">
+        <div className="flex flex-col items-center p-20 gap-x-14 bg-white_color h-screen">
+          <div className="flex flex-row items-center  " >
             <div className="flex flex-col">
-            <img src={user.profilePhoto} alt="" className="w-32" />
+            <img  src={user.profilePhoto} alt="" className="w-60" />
            <label htmlFor=""> <input   type="file"   onChange={(e)=>{handleFileUpload(e)}}/></label>
            </div>
             <div>
-              <h1>{user.name}</h1>
-              <h2 className="text-sm">@{user.username}</h2>
+              <h1 className="text-6xl">{user.name}</h1>
+              <h2 className="text-2xl pt-2">@{user.username}</h2>
               <p>{user.description}</p>
             </div>
-          </div>
 
-          <div className="flex gap-2">
-            <div className="flex flex-col items-center">
+            <div className="flex gap-2 ml-24 text-4xl gap-x-16 container mb-4 p-4 rounded-md shadow-md"
+                style={{ backgroundColor: "#E8EDE8" }}>
+            <div className="flex flex-col items-center">  
               <h1>Total Score</h1>
               <p className="text-5xl">{user.totalScore}</p>
             </div>
@@ -74,6 +74,12 @@ function UserProfile() {
               <p className="text-5xl">0</p>
             </div>
           </div>
+
+
+            
+          </div>
+
+        
 
           <div className="mt-10 flex gap-8">
             <div>

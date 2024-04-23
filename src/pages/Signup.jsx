@@ -19,8 +19,8 @@ function Signup() {
       email: email,
       username: username,
       name: name,
-      password: password,
-      profilePhoto: profilePhoto
+      password: password
+      
     };
 
     axios
@@ -80,14 +80,6 @@ function Signup() {
             }}
           />
         </label>
-
-        {/* <label>
-          Profile Photo
-          <input
-            type="file"
-            onChange={(e)=>{handleFileUpload(e)}}
-          />
-        </label> */}
 
 
         <button>Submit</button>
