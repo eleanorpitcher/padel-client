@@ -10,6 +10,7 @@ function Signup() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,6 +20,7 @@ function Signup() {
       username: username,
       name: name,
       password: password,
+      profilePhoto: profilePhoto
     };
 
     axios
@@ -32,6 +34,8 @@ function Signup() {
         console.log(err);
       });
   };
+
+  
 
   return (
     <div>
@@ -76,6 +80,15 @@ function Signup() {
             }}
           />
         </label>
+
+        {/* <label>
+          Profile Photo
+          <input
+            type="file"
+            onChange={(e)=>{handleFileUpload(e)}}
+          />
+        </label> */}
+
 
         <button>Submit</button>
       </form>
