@@ -19,12 +19,7 @@ function Signup() {
       email: email,
       username: username,
       name: name,
-<<<<<<< HEAD
-      password: password
-      
-=======
       password: password,
->>>>>>> c85142781d4deb57d63d91994f72200ae3fa59e4
     };
 
     axios
@@ -87,8 +82,6 @@ function Signup() {
             />
           </label>
 
-<<<<<<< HEAD
-=======
           <label>
             <input
               type="password"
@@ -103,7 +96,6 @@ function Signup() {
           <button className="bg-white_color text-brown_color text-md w-2/4 mx-auto  border-2 border-brown_color py-4 px-2 hover:bg-brown_color hover:text-white_color">
             Sign up
           </button>
->>>>>>> c85142781d4deb57d63d91994f72200ae3fa59e4
 
           <hr className="mt-10 mb-6" />
           <h1 className="text-olive_color">Already have an account?</h1>
