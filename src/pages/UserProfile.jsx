@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function UserProfile() {
+  const [imageUrl, setImageUrl] = useState(null)
   const { id } = useParams();
   const [user, setUser] = useState("");
   useEffect(() => {
@@ -15,12 +16,41 @@ function UserProfile() {
         console.log(err);
       });
   }, []);
+  // 
+
+  const handleFileUpload = (e) => {
+    console.log("The file to be uploaded is: ", e.target.files[0]);
+    const uploadData = new FormData();
+    uploadData.append("imageUrl", e.target.files[0]);
+  
+    axios.post('http://localhost:5005/api/upload', uploadData)
+      .then(response => {
+        console.log("Uploaded file URL:", response.data.fileUrl);
+        const newProfilePhoto = response.data.fileUrl;
+        setImageUrl(newProfilePhoto);  // Update imageUrl state
+  
+        // Now update the user profile photo in the backend
+        axios.put(`http://localhost:5005/api/users/${id}/photo`, { profilePhoto: newProfilePhoto })
+          .then(() => {
+            // Update local user state to reflect the new profile photo
+            setUser(prevUser => ({ ...prevUser, profilePhoto: newProfilePhoto }));
+          })
+          .catch(err => console.log("Error updating user profile photo:", err));
+      })
+      .catch(err => console.log("Error while uploading the file:", err));
+  };
+
+
+
   return (
     <>
       {user && (
         <div className="flex flex-col justify-center items-center gap-4">
           <div className="flex flex-row items-center w-full">
+            <div className="flex flex-col">
             <img src={user.profilePhoto} alt="" className="w-32" />
+           <label htmlFor=""> <input   type="file"   onChange={(e)=>{handleFileUpload(e)}}/></label>
+           </div>
             <div>
               <h1>{user.name}</h1>
               <h2 className="text-sm">@{user.username}</h2>

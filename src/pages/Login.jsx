@@ -87,11 +87,13 @@ function Login() {
         </form>
       </div>
 
+
       {error && (
         <div className="absolute mt-72">
           <h1>{error.response.data.message}</h1>
         </div>
       )}
+
     </div>
   );
 }
