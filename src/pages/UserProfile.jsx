@@ -16,6 +16,7 @@ function UserProfile() {
         console.log(err);
       });
   }, []);
+  // 
 
   const handleFileUpload = (e) => {
     console.log("The file to be uploaded is: ", e.target.files[0]);
