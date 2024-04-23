@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
@@ -51,7 +52,7 @@ function Homepage() {
 
   return (
     <div
-      className="w-screen flex flex-col"
+      className="w-full flex flex-col"
       style={{ backgroundColor: "#F5FBEF" }}
     >
       <div className="flex flex-col p-10">
@@ -64,7 +65,7 @@ function Homepage() {
           leaderboard
         </p>
         <div className="p-10 pb-20">
-          <button className="text-1xl text-left text-center p-3 border-2 login-btn">
+          <button className="text-xl text-center p-3 border-2 login-btn">
             Join Padel4All
           </button>
         </div>
@@ -100,7 +101,7 @@ function Homepage() {
                 <p>Participants: {event.participants.length}</p>
                 <div className="flex justify-center">
                   <Link to={`/events/${event._id}`}>
-                    <button className="p-3 mt-5 join-btn" style={{}}>
+                    <button className="p-3 mt-5 join-btn">
                       Join
                     </button>
                   </Link>
