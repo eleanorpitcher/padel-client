@@ -8,7 +8,6 @@ function AllEvents() {
   const [events, setEvents] = useState([]);
   const [eventsAll, setEventsAll] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState(true);
-  const [pastEvents, setPastEvents] = useState([])
   const currentDate = new Date();
   const [years, setYears] = useState([
     { value: "default", label: "All Years" },
@@ -30,14 +29,16 @@ function AllEvents() {
   const sortByYear = (selectedYear) => {
     let filteredEvents;
 
-    if (selectedYear === "default") {
-      filteredEvents = eventsAll;
-    } else {
-      filteredEvents = eventsAll.filter(
-        (event) =>
-          event.date &&
-          new Date(event.date).getFullYear().toString() === selectedYear
-      );
+    if(!upcomingEvents) {
+      if (selectedYear === "default") {
+        filteredEvents = eventsAll;
+      } else {
+        filteredEvents = eventsAll.filter(
+          (event) =>
+            event.date &&
+            new Date(event.date).getFullYear().toString() === selectedYear
+        );
+      }
     }
 
     console.log("Filtered events:", filteredEvents);
@@ -56,16 +57,11 @@ function AllEvents() {
       });
   }, []);
 
-  useEffect(() => {
-    const filteredEvents = upcomingEvents
-      ? events.filter((event) => new Date(event.date) > currentDate)
-      : events.filter((event) => new Date(event.date) < currentDate);
-
-    // If no year filter is applied, set filtered events to the result of upcoming/past events filtering
-    if (!filteredEvents.length && !years.some((year) => year.value !== "default")) {
-      setPastEvents(filteredEvents);
+  useEffect(()=> {
+    if(upcomingEvents) {
+      setEvents(eventsAll)
     }
-  }, [upcomingEvents, events, currentDate, years]);
+  },[upcomingEvents])
   
 
   return (
