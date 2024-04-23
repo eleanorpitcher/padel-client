@@ -12,6 +12,7 @@ function Scoreboard() {
 
             const playersWhoHaveParticipated = allPlayers.filter(player => player.gamesPlayed.length > 0)
             setPlayers(playersWhoHaveParticipated)
+            console.log(allPlayers)
 
             const scoresSorted = [...playersWhoHaveParticipated].sort((a,b)=>b.totalScore-a.totalScore)
             setPlayers(scoresSorted) 

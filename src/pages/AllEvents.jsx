@@ -29,14 +29,16 @@ function AllEvents() {
   const sortByYear = (selectedYear) => {
     let filteredEvents;
 
-    if (selectedYear === "default") {
-      filteredEvents = eventsAll;
-    } else {
-      filteredEvents = eventsAll.filter(
-        (event) =>
-          event.date &&
-          new Date(event.date).getFullYear().toString() === selectedYear
-      );
+    if(!upcomingEvents) {
+      if (selectedYear === "default") {
+        filteredEvents = eventsAll;
+      } else {
+        filteredEvents = eventsAll.filter(
+          (event) =>
+            event.date &&
+            new Date(event.date).getFullYear().toString() === selectedYear
+        );
+      }
     }
 
     console.log("Filtered events:", filteredEvents);
@@ -55,30 +57,49 @@ function AllEvents() {
       });
   }, []);
 
+  useEffect(()=> {
+    if(upcomingEvents) {
+      setEvents(eventsAll)
+    }
+  },[upcomingEvents])
+  
+
   return (
     <div className="p-4" style={{ backgroundColor: "#F5FBEF" }}>
       <h1 className="text-center text-4xl px-10 py-10">
         {upcomingEvents ? "Upcoming Events" : "Past Events"}
       </h1>
-      <div className="flex flex-col mb-4">
+      <div className="flex mb-4 flex-col">
         <div className="flex flex-row">
-          <button
-            onClick={() => setUpcomingEvents(true)}
-            className={`btn-green-1 px-4 py-2 rounded-lg mb-2 ${
-              !upcomingEvents ? "btn-white" : ""
-            }`}
-          >
-            Upcoming Events
-          </button>
-          <button
-            onClick={() => setUpcomingEvents(false)}
-            className={`btn-green-1 px-4 py-2 rounded-lg mb-2 mx-2 ${
-              upcomingEvents ? "btn-white" : ""
-            }`}
-          >
-            Past Events
-          </button>
-          <div className="flex flex-row">
+          <div className="justify-start">
+            <button
+              onClick={() => setUpcomingEvents(true)}
+              className={`btn-green-1 px-4 py-2 rounded-lg mb-2 ${
+                !upcomingEvents ? "btn-white" : ""
+              }`}
+            >
+              Upcoming Events
+            </button>
+            <button
+              onClick={() => setUpcomingEvents(false)}
+              className={`btn-green-1 px-4 py-2 rounded-lg mb-2 mx-2 ${
+                upcomingEvents ? "btn-white" : ""
+              }`}
+            >
+              Past Events
+            </button>
+          </div>
+          <div className="justify-end">
+              <Link to={"/new-event"}>
+                <button
+                  className={`btn-green-3 px-4 py-2 rounded-lg mb-2 mx-20 justify-end`}
+                  style={{ width: "200px" }}
+                > Create New event
+                </button>
+              </Link>
+          </div>
+        </div>
+        <div className="flex flex-row">
             {!upcomingEvents && (
               <div className="year-dropdown">
                 <select
@@ -98,18 +119,8 @@ function AllEvents() {
                 </select>
               </div>
             )}
-          </div>
-          <div>
-            <Link to={"/new-event"}>
-              <button
-                className={`rounded-lg flex flex-row`}
-                style={{ width: "200px" }}
-              >
-                <img src={createImage} alt="" />
-              </button>
-            </Link>
-          </div>
         </div>
+          
       </div>
       <div>
         {upcomingEvents && (
@@ -118,7 +129,7 @@ function AllEvents() {
               return (
                 <div
                   key={oneEvent._id}
-                  className="border border-gray-400 p-4 rounded-lg"
+                  className="border border-gray-400 shadow-md p-4 rounded-lg"
                 >
                   <h1 className="text-xl font-bold mb-2 text-center">
                     {oneEvent.name}
@@ -133,7 +144,7 @@ function AllEvents() {
 
                   <p className="text-gray-700 my-5">{oneEvent.description}</p>
                   <Link to={`/events/${oneEvent._id}`}>
-                    <button className="btn-white px-4 py-2 rounded-lg">
+                    <button className="btn-green-3 px-4 py-2 rounded-lg">
                       Learn more
                     </button>
                   </Link>
@@ -148,18 +159,22 @@ function AllEvents() {
               return (
                 <div
                   key={oneEvent._id}
-                  className="border border-gray-400 p-4 rounded-lg"
+                  className="border border-gray-400 shadow-md p-4 rounded-lg"
                 >
-                  <h1 className="text-xl font-bold mb-2">{oneEvent.name}</h1>
-                  <h2 className="text-gray-600 mb-2">
+                  <h1 className="text-xl font-bold mb-2 text-center">
+                    {oneEvent.name}
+                  </h1>
+                  <h2 className="text-gray-600 mb-2 text-center">
                     {dateFormat(oneEvent.date, "fullDate")}
                   </h2>
-                  <p className="text-gray-700 mb-2">{oneEvent.description}</p>
-                  <p className="text-gray-700 mb-2">
-                    Participants: {oneEvent.participants.length}
+                  <p className="text-gray-700 my-3 text-center">
+                    <strong>Participants:</strong>{" "}
+                    {oneEvent.participants.length}
                   </p>
+
+                  <p className="text-gray-700 my-5">{oneEvent.description}</p>
                   <Link to={`/events/${oneEvent._id}`}>
-                    <button className="btn-white px-4 py-2 rounded-lg">
+                    <button className="btn-green-3 px-4 py-2 rounded-lg">
                       Learn more
                     </button>
                   </Link>
