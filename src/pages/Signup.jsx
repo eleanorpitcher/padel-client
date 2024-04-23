@@ -20,7 +20,6 @@ function Signup() {
       username: username,
       name: name,
       password: password,
-      profilePhoto: profilePhoto,
     };
 
     axios
