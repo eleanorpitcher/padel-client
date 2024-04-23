@@ -78,7 +78,7 @@ function Login() {
           {<SlideButton></SlideButton>}
 
           <hr className="mt-10 mb-6" />
-          <h1>Don't have an account?</h1>
+          <h1 className="text-brown_color">Don't have an account?</h1>
           <Link to="/signup">
             <button className="bg-white_color text-brown_color text-md w-2/4 mx-auto  border-2 border-brown_color py-2 px-2 hover:bg-brown_color hover:text-white_color">
               Sign up
@@ -87,13 +87,11 @@ function Login() {
         </form>
       </div>
 
-
       {error && (
         <div className="absolute mt-72">
           <h1>{error.response.data.message}</h1>
         </div>
       )}
-
     </div>
   );
 }

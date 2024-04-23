@@ -19,7 +19,10 @@ function Navbar() {
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex gap-2">
               <Link to="/">
-                <img src={logo} className="w-40 pl-7 " />
+                <img
+                  src={logo}
+                  className="w-40 pl-7 transform transition duration-500 hover:scale-125"
+                />
               </Link>
             </div>
 
@@ -58,7 +61,10 @@ function Navbar() {
         {!isLoggedIn && (
           <div className="flex flex-row items-center  w-full">
             <Link to="/">
-              <img src={logo} className="w-40 pl-7 " />
+              <img
+                src={logo}
+                className="w-40 pl-7 transform transition duration-500 hover:scale-125"
+              />
             </Link>
 
             <div className="flex mx-auto gap-16">
