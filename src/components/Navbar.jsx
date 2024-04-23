@@ -37,10 +37,16 @@ function Navbar() {
             </div>
 
             <div className="flex gap-6">
-              <NavLink to={`/profile/${user._id}`}>
+              <NavLink
+                to={`/profile/${user._id}`}
+                className="transform transition duration-500 hover:scale-125"
+              >
                 <img src={userProfileIcon} alt="" className="w-8" />
               </NavLink>
-              <NavLink to="/">
+              <NavLink
+                to="/"
+                className="transform transition duration-500 hover:scale-125"
+              >
                 <button onClick={logOutUser}>
                   <img src={logoutIcon} alt="" className="w-8" />
                 </button>
