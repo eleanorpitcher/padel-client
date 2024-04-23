@@ -44,7 +44,7 @@ function OneEvent() {
       {event && (
         <div className="w-2/3 p-4">
           <div key={event._id}>
-            <h1 className="text-2xl font-bold mb-4 text-center">{event.name}</h1>
+            <h1 className="text-center text-4xl px-10 py-10">{event.name}</h1>
             <p className="text-2xl mb-2">{event.description}</p>
             {storedToken && <p>You're already signed up!</p>}
             {!storedToken && <button onClick={joinEvent}>Sign up</button>}
