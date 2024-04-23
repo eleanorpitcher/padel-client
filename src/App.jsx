@@ -11,6 +11,7 @@ import UserProfile from "./pages/UserProfile";
 import { Route, Routes } from "react-router-dom";
 import Scoreboard from "./components/Scoreboard";
 import ScoreboardPage from "./pages/ScoreboardPage";
+import EventResults from "./pages/EventResults";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route element={<Signup />} path="/signup"></Route>
         <Route element={<UserProfile />} path="/profile/:id"></Route>
         <Route element={<ScoreboardPage/>} path="/scoreboard"></Route>
+        <Route element={<EventResults/>} path="/events/:id/results"></Route>
       </Routes>
     </>
   );

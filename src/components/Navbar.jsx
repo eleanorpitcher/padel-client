@@ -8,7 +8,7 @@ function Navbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
 
   return (
-    <div className="bg-green3_color  flex w-full sticky top-0 justify-between flex-wrap pt-4">
+    <div className="bg-green3_color  flex w-full sticky z-50 top-0 justify-between flex-wrap pt-4 navbar">
       <img src={logo} className="w-40 pl-7 " />
       <div className="xl:flex xl:pt-4 xl:mr-24 xl:gap-28 xl:mt-4">
         {isLoggedIn && (
