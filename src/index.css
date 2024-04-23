@@ -2,13 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html{
+  font-family: 'Roboto Condensed';
+}
+
 .btn-green-1{
-  background-color: #84C318;
+  background-color: #A4B7A4;
   color: white
 }
 
 .btn-green-2{
-  background-color: #84C318;
+  background-color:#A4B7A4;
   color: white
 }
 
@@ -25,6 +29,42 @@
 }
 
 .btn-white:hover{
-  background-color: #84C318;
+  background-color: #A4B7A4;
   color: white
 }
+
+.join-btn{
+  background-color: #A4B7A4;
+  width: 200px;
+  border-radius: 20px;
+}
+
+.join-btn:hover{
+  color: white;
+}
+
+.login-btn{
+  border-color: #A4B7A4;
+  width: 200px;
+  border-radius: 20px
+}
+
+.year-btn{
+  border-color: #A4B7A4;
+  width: 120px;
+  border-radius: 20px
+}
+
+.login-btn:hover{
+  background-color: #A4B7A4;
+  color: white
+}
+
+.arrow-img:hover {
+  transform: translateX(10px);
+}
+
+.create-img:hover {
+  transform: scale(1.1);
+}
+
