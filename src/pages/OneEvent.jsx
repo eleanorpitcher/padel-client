@@ -15,7 +15,7 @@ function OneEvent() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5005/api/events/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
       .then((oneEvent) => {
         setEvent(oneEvent.data);
       })
@@ -27,7 +27,7 @@ function OneEvent() {
   function joinEvent() {
     axios
       .put(
-        `http://localhost:5005/api/events/${id}/join`,
+        `${import.meta.env.VITE_API_URL}/api/events/${id}/join`,
         {},
         { headers: { Authorization: `Bearer ${storedToken}` } }
       )

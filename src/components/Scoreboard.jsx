@@ -6,7 +6,7 @@ function Scoreboard() {
     const [players, setPlayers] = useState([])
 
     useEffect(()=>{
-        axios.get(`http://localhost:5005/api/users/`)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/`)
         .then((response)=>{
             const allPlayers = response.data
 
