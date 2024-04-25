@@ -1,0 +1,204 @@
+/* eslint-disable no-unused-vars */
+import React from "react";
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
+import arrow from "../assets/icons8-arrow-right-50.png";
+import createEvent from "../assets/Eleanor1.2 (1).png";
+
+function Homepage() {
+  const [events, setEvents] = useState([]);
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+  const [players, setPlayers] = useState([]);
+  let firstThreePlayers = [];
+
+  useEffect(() => {
+    axios
+      .get("https://padel-server.adaptable.app/api/events")
+      .then((response) => {
+        setEvents(response.data);
+        const sortedEvents = response.data.sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+        setEvents(sortedEvents.slice(0, 3));
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`https://padel-server.adaptable.app/api/users/`)
+      .then((response) => {
+        const allPlayers = response.data;
+
+        const playersWhoHaveParticipated = allPlayers.filter(
+          (player) => player.gamesPlayed.length > 0
+        );
+        const firstThreePlayers = playersWhoHaveParticipated.slice(0, 3);
+        setPlayers(firstThreePlayers);
+
+        const scoresSorted = [...firstThreePlayers].sort(
+          (a, b) => b.totalScore - a.totalScore
+        );
+        setPlayers(scoresSorted);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  return (
+    <div
+      className="w-full flex flex-col"
+      style={{ backgroundColor: "#F5FBEF" }}
+    >
+      <div className="flex flex-col p-10">
+        <h1 className="text-4xl px-10 pt-10">
+          Find and Compete in Americano tournaments at Barcelona's Most Social
+          Padel Club
+        </h1>
+        <p className="text-2xl pt-3 pl-10">
+          Browse upcoming events, play with friends, and work your way up the
+          leaderboard
+        </p>
+        <div className="p-10 pb-20">
+          <button className="text-xl text-center p-3 border-2 login-btn">
+            Join Padel4All
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col w-full px-20">
+        <div className="flex flex-row justify-between items-center">
+          <h2 className="text-3xl">Upcoming events. Book now!</h2>
+          <div className="flex flex-row items-center">
+            <h1 className="text-3xl ">See more events</h1>
+            <Link to={"/events"}>
+              <img className="arrow-img" src={arrow} alt="" />
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-7">
+          {events.length > 0 ? (
+            events.map((event) => (
+              <div
+                key={event._id}
+                className="container mb-4 p-4 rounded-md shadow-md"
+                style={{ backgroundColor: "#E8EDE8" }}
+              >
+                <div>
+                  <div className="flex flex-row justify-between">
+                    <h2 className="text-2xl text-left">{event.name}</h2>
+                    <h3 className="pt-1 pl-10 ">
+                      {new Date(event.date).toLocaleDateString()}
+                    </h3>
+                  </div>
+                </div>
+                <p>{event.description}</p>
+                <p>Participants: {event.participants.length}</p>
+                <div className="flex justify-center">
+                  <Link to={`/events/${event._id}`}>
+                    <button className="p-3 mt-5 join-btn">
+                      Join
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No upcoming events found.</p>
+          )}
+        </div>
+      </div>
+
+      <div className="rounded-lg">
+        <div>
+          <h2 className="text-2xl px-20 py-10">
+            Who's Topping the Leaderboard this Week?
+          </h2>
+        </div>
+        <div className="flex justify-center items-center h-full">
+          <div className="w-3/4 text-center">
+            <table className="w-full border-collapse border border-gray-400">
+              <thead style={{ backgroundColor: "#E8EDE8", color: "#748B75" }}>
+                <tr className="border border-gray-400 px-4 py-2">
+                  <th>#</th>
+                  <th>Username</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {players.map((player, index) => (
+                  <tr
+                    key={player.id}
+                    className="border border-gray-400 px-4 py-2"
+                  >
+                    <td className="py-2">{index + 1}</td>
+                    <td>@{player.username}</td>
+                    <td>{player.totalScore}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex flex-col">
+          <div
+            className="flex flex-col m-20 p-10 rounded-lg justify-center items-center"
+            style={{ backgroundColor: "#A4B7A4" }}
+          >
+            <div className="px-10">
+              <h3 className="text-center text-2xl text-white ">
+                Bring the padel community together at your own event!
+              </h3>
+            </div>
+            {isLoggedIn && (
+              <div className="px-10 mt-2">
+                <Link to={"/new-event"}>
+                  {/* <button
+                    className="text-lg p-3 border-2 rounded-lg"
+                    style={{ width: "200px" }}
+                  >
+                    Create an event!
+                  </button> */}
+
+                  <img
+                    src={createEvent}
+                    style={{ height: "150px", width: "150px" }}
+                    className="create-img"
+                  />
+                </Link>
+              </div>
+            )}
+
+            {!isLoggedIn && (
+              <div className="pt-5 font-white text-1xl">
+                <Link to="login">
+                  <button className="px-4 m-2 border rounded-lg ">
+                    Log in
+                  </button>
+                </Link>{" "}
+                or{" "}
+                <Link to="signup">
+                  <button className="px-4 m-2 border rounded-lg">
+                    {" "}
+                    Sign up
+                  </button>
+                </Link>{" "}
+                to create an event.
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Homepage;

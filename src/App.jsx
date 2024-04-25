@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import Homepage from "./pages/Homepage";
+import AllEvents from "./pages/AllEvents";
+import OneEvent from "./pages/OneEvent";
+import AddEvent from "./pages/AddEvent";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Navbar from "./components/Navbar";
+import UserProfile from "./pages/UserProfile";
+
+import { Route, Routes } from "react-router-dom";
+import Scoreboard from "./components/Scoreboard";
+import ScoreboardPage from "./pages/ScoreboardPage";
+import EventResults from "./pages/EventResults";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Navbar />
+      <Routes>
+        <Route element={<Homepage />} path="/"></Route>
+        <Route element={<AllEvents />} path="/events"></Route>
+        <Route element={<OneEvent />} path="/events/:id"></Route>
+        <Route element={<AddEvent />} path="/new-event"></Route>
+        <Route element={<Login />} path="/login"></Route>
+        <Route element={<Signup />} path="/signup"></Route>
+        <Route element={<UserProfile />} path="/profile/:id"></Route>
+        <Route element={<ScoreboardPage/>} path="/scoreboard"></Route>
+        <Route element={<EventResults/>} path="/events/:id/results"></Route>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
