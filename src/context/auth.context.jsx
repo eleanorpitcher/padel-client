@@ -13,7 +13,7 @@ function AuthProviderWrapper(props) {
 
     if (storedToken) {
       axios
-        .get("http://localhost:5005/auth/verify", {
+        .get("https://padel-server.adaptable.app/auth/verify", {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => {

@@ -23,7 +23,7 @@ function Signup() {
     };
 
     axios
-      .post("http://localhost:5005/auth/signup", newUser)
+      .post("https://padel-server.adaptable.app/auth/signup", newUser)
       .then((createdUser) => {
         console.log(createdUser.data);
         navigate("/login");

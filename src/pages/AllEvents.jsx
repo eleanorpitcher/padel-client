@@ -47,7 +47,7 @@ function AllEvents() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5005/api/events")
+      .get("https://padel-server.adaptable.app/api/events")
       .then((allEvents) => {
         setEvents(allEvents.data);
         setEventsAll(allEvents.data);

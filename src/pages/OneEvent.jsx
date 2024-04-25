@@ -15,7 +15,7 @@ function OneEvent() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5005/api/events/${id}`)
+      .get(`https://padel-server.adaptable.app/api/events/${id}`)
       .then((oneEvent) => {
         setEvent(oneEvent.data);
       })
@@ -27,7 +27,7 @@ function OneEvent() {
   function joinEvent() {
     axios
       .put(
-        `http://localhost:5005/api/events/${id}/join`,
+        `https://padel-server.adaptable.app/events/${id}/join`,
         {},
         { headers: { Authorization: `Bearer ${storedToken}` } }
       )

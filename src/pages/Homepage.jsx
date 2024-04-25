@@ -15,7 +15,7 @@ function Homepage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5005/api/events")
+      .get("https://padel-server.adaptable.app/api/events")
       .then((response) => {
         setEvents(response.data);
         const sortedEvents = response.data.sort(
@@ -30,7 +30,7 @@ function Homepage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5005/api/users/`)
+      .get(`https://padel-server.adaptable.app/api/users/`)
       .then((response) => {
         const allPlayers = response.data;
 
