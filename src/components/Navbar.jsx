@@ -51,7 +51,7 @@ function Navbar() {
                 className="transform transition duration-500 hover:scale-125"
               >
                 <button onClick={logOutUser}>
-                  <img src={logoutIcon} alt="" className="w-8" />
+                  <img src={logoutIcon} alt="" className="w-8 " />
                 </button>
               </NavLink>
             </div>
