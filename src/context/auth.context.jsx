@@ -13,7 +13,7 @@ function AuthProviderWrapper(props) {
 
     if (storedToken) {
       axios
-        .get("https://padel-server.adaptable.app/auth/verify", {
+        .get(`${import.meta.env.VITE_API_URL}/auth/verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => {

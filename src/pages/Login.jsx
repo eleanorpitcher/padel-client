@@ -20,7 +20,7 @@ function Login() {
     };
 
     axios
-      .post("https://padel-server.adaptable.app/auth/login", reqBody)
+      .post(`${import.meta.env.VITE_API_URL}/auth/login`, reqBody)
       .then((result) => {
         localStorage.setItem("authToken", result.data.authToken);
         authenticateUser();

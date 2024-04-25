@@ -24,7 +24,7 @@ function AddEvent() {
   function handleSubmit(e) {
     e.preventDefault();
     axios
-      .post(`https://padel-server.adaptable.app/api/events`, newEvent)
+      .post(`${import.meta.env.VITE_API_URL}/api/events`, newEvent)
       .then((event) => {
         navigate(`/events/${event.data._id}`);
         console.log(event);

@@ -6,7 +6,7 @@ function Scoreboard() {
     const [players, setPlayers] = useState([])
 
     useEffect(()=>{
-        axios.get(`https://padel-server.adaptable.app/api/users/`)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/`)
         .then((response)=>{
             const allPlayers = response.data
 

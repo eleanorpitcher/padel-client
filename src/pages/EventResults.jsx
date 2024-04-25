@@ -29,7 +29,7 @@ function EventResults() {
     const {id} = useParams()
 
     useEffect(()=>{
-        axios.get(`https://padel-server.adaptable.app/events/${id}`)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
         .then((event)=>{
             setEvent(event.data)
             console.log(event.data.participants)
@@ -59,7 +59,7 @@ function EventResults() {
 
             
         }
-        axios.put(`https://padel-server.adaptable.app/api/events/${id}/results`, arrayToBePosted)
+        axios.put(`${import.meta.env.VITE_API_URL}/api/events/${id}/results`, arrayToBePosted)
         .then((response)=>{
             console.log(response)
         })

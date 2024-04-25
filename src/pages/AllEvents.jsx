@@ -47,7 +47,7 @@ function AllEvents() {
 
   useEffect(() => {
     axios
-      .get("https://padel-server.adaptable.app/api/events")
+      .get(`${import.meta.env.VITE_API_URL}/api/events`)
       .then((allEvents) => {
         setEvents(allEvents.data);
         setEventsAll(allEvents.data);
