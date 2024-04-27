@@ -12,17 +12,22 @@ function OneEvent() {
   const [event, setEvent] = useState(null);
   const { id } = useParams();
   const storedToken = localStorage.getItem("authToken");
+  const [currentParticipant, setCurrentParticipant] = useState(false);
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
-      .then((oneEvent) => {
-        setEvent(oneEvent.data);
+      .then((response) => {
+        const oneEvent = response.data;
+        setEvent(oneEvent);
+        const foundParticipant = oneEvent.participants.find(participant => participant._id === user._id);
+        console.log(foundParticipant)
+        setCurrentParticipant(!!foundParticipant);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [id]);
+  }, [id, user]);
 
   function joinEvent() {
     axios
@@ -40,31 +45,27 @@ function OneEvent() {
       });
   }
 
+  console.log(user)
+
   return (
     <div className="flex" style={{ backgroundColor: "#F5FBEF" }}>
       {event && (
-        <div className="w-screen px-10">
-          <div className="flex flex-row justify-between py-5">
+        <div className="w-screen h-screen">
+          <div className="flex flex-row justify-between p-5">
 
-            <div className="flex flex-col text-lg px-4 py-2 rounded-lg shadow-md" style={{ backgroundColor: "#E8EDE8", width: '20%' }}>
+            <div className="flex flex-col text-lg px-4 rounded-lg shadow-md" style={{ backgroundColor: "#E8EDE8", width: '20%' }}>
               <strong>Organised by: </strong>
               {event.organizer.name}
               <br></br>@{event.organizer.username}
             </div>
            
-              {storedToken && (
-                <p className="font-bold text-2xl" style={{ color: "#748B75" }}>
-                  You're already signed up!
-                </p>
-              )}
-              {!storedToken && (
-                <button
-                  onClick={joinEvent}
-                  className="btn-green-3 text-2xl rounded-md mx-2"
-                >
-                  Sign up
-                </button>
-              )}
+            {currentParticipant ? (
+              <p>You're already signed up for this event!</p>
+            ) : (
+              <button onClick={joinEvent} className="btn-green-3 text-2xl rounded-md px-6">
+                Sign up!
+              </button>
+            )}
                 
           </div>
           <div key={event._id}>
@@ -83,14 +84,18 @@ function OneEvent() {
                         Who's participating? ({event.participants.length})
                       </h2>
                       <div>
-                        <ul className="flex flex-row justify-center ">
+                        <ul className="flex flex-row justify-center p-10">
                           {event.participants.map((oneParticipant, index) => (
                             <li
                               key={index}
-                              className="mx-2 p-10 bg-white text-lg rounded-lg shadow-lg"
-                              style={{width:'300px', backgroundColor: '#A4B7A4', color: 'white'}}
+                              className="flex items-center mx-2 p-5 bg-white text-lg rounded-lg shadow-lg"
+                              style={{ backgroundColor: "#E8EDE8", width: '20%' }}
                             >
-                              {oneParticipant.name}
+                              <img src={oneParticipant.profilePhoto} alt="" className="w-30 h-20 rounded-full hover:opacity-50" />
+                              <div className="flex-1">
+                                <h3 className="mx-10 text-left font-bold">{oneParticipant.name}</h3>
+                                <h3 className="mx-10 text-left">@{oneParticipant.username}</h3>
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -98,24 +103,22 @@ function OneEvent() {
                     </>
                   )}
                   {!isLoggedIn && (
-                    <div className="flex flex-row pt-3">
-                      <h2 className="text-lg font-bold">
+                    <div className="flex flex-col pt-3 ">
+                      <h2 className="text-3xl font-bold pb-5">
                         How many players are participating?
                       </h2>
-                      <ul>
-                        <li>{event.participants.length}</li>
-                      </ul>
+                        <p className="text-2xl pb-5 text-center">{event.participants.length}</p>
                     </div>
                   )}
                 </div>
               </div>
               {event && (
-                <div className="flex flex-col text-center">
-                  <h2 className="mb-2 text-2xl pt-10">
+                <div className="flex flex-col text-center py-10" style={{backgroundColor: '#A4B7A4'}}>
+                  <h2 className="text-2xl py-3">
                     {event.organizer.name}, input the results for this match
                   </h2>
                   <Link to={`/events/${id}/results`}>
-                    <button className={`btn-green-1 px-6 py-2 rounded-lg mb-2 btn-green-3`}>
+                    <button className={`btn-green-1 py-4 px-6 rounded-lg mb-2 btn-green-3`}>
                       Results
                     </button>
                   </Link>
