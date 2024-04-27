@@ -11,18 +11,27 @@ function Homepage() {
   const [events, setEvents] = useState([]);
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
   const [players, setPlayers] = useState([]);
-  let firstThreePlayers = [];
   const navigate = useNavigate();
+  const currentDate = new Date()
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/events`)
       .then((response) => {
         setEvents(response.data);
-        const sortedEvents = response.data.sort(
-          (a, b) => new Date(a.date) - new Date(b.date)
-        );
-        setEvents(sortedEvents.slice(0, 3));
+        // const sortedEvents = response.data.sort(
+        //   (a, b) => new Date(b.date) - new Date(a.date)
+        // );
+        const filteredEvents = events
+          ? events.filter((event) => new Date(event.date) > currentDate)
+          : events.filter((event) => new Date(event.date) < currentDate);
+        const sortByDate = (event1, event2) => {
+          const date1 = new Date(event1.date);
+          const date2 = new Date(event2.date);
+          return date1 - date2;
+        }
+      const chronologicalEvents = filteredEvents.sort(sortByDate);
+        setEvents(chronologicalEvents.slice(0, 3));
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
@@ -34,17 +43,16 @@ function Homepage() {
       .get(`${import.meta.env.VITE_API_URL}/api/users/`)
       .then((response) => {
         const allPlayers = response.data;
+        // console.log('all players', allPlayers)
 
         const playersWhoHaveParticipated = allPlayers.filter(
           (player) => player.gamesPlayed.length > 0
         );
-        const firstThreePlayers = playersWhoHaveParticipated.slice(0, 3);
-        setPlayers(firstThreePlayers);
-
-        const scoresSorted = [...firstThreePlayers].sort(
+        console.log(playersWhoHaveParticipated)
+        const scoresSorted = [...playersWhoHaveParticipated].sort(
           (a, b) => b.totalScore - a.totalScore
-        );
-        setPlayers(scoresSorted);
+        )
+        setPlayers(scoresSorted.slice(0,3))
       })
       .catch((err) => {
         console.log(err);
@@ -122,29 +130,46 @@ function Homepage() {
           </h2>
         </div>
         <div className="flex justify-center items-center h-full">
-          <div className="w-3/4 text-center">
-            <table className="w-full border-collapse border border-gray-400">
-              <thead style={{ backgroundColor: "#E8EDE8", color: "#748B75" }}>
-                <tr className="border border-gray-400 px-4 py-2">
-                  <th>#</th>
-                  <th>Username</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {players.map((player, index) => (
-                  <tr
-                    key={player.id}
-                    className="border border-gray-400 px-4 py-2"
-                  >
-                    <td className="py-2">{index + 1}</td>
-                    <td>@{player.username}</td>
-                    <td>{player.totalScore}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg lg:w-3/4">
+                {/* <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white">
+                    <label htmlFor="table-search" className="sr-only">Search</label>
+                </div> */}
+                <table className="w-full text-sm text-left rtl:text-right ">
+                    <thead className="text-xs text-gray-700 uppercase" style={{backgroundColor: '#A4B7A4'}}>
+                        <tr>
+                            <th scope="col" className="px-6 py-3">
+                                #
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Player
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Score
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {players.map((player, index) => (
+                            <tr className={`border-b border-gray-700 ${index === 0 ? 'bg-green-600' : ''}`} key={player.id}>
+                                <td className="px-6 py-4 items-center">
+                                    {index + 1}
+                                </td>
+                                <td scope="row" className="flex items-center px-6 py-4 whitespace-nowrap dark:text-white">
+                                    <img className="w-10 h-10 rounded-full" src={player.profilePhoto} alt={`${player.name} image`} />
+                                    <div className="ps-3">
+                                        <div className="text-base font-semibold">{player.name}</div>
+                                        <div className="font-normal text-gray-500">@{player.username}</div>
+                                    </div>  
+                                </td>
+                                <td className="px-6 py-4 items-center">
+                                    {player.totalScore}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
       </div>
 
