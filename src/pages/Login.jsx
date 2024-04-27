@@ -84,14 +84,14 @@ function Login() {
               Sign up
             </button>
           </Link>
+
+          {error && (
+            <div className="bg-red-800 w-2/4 mx-auto p-2 rounded-lg text-white_color">
+              <h1>{error.response.data.message}</h1>
+            </div>
+          )}
         </form>
       </div>
-
-      {error && (
-        <div className="absolute mt-72">
-          <h1>{error.response.data.message}</h1>
-        </div>
-      )}
     </div>
   );
 }
