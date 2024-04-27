@@ -47,11 +47,15 @@ function Navbar() {
                 <img src={userProfileIcon} alt="" className="w-8" />
               </NavLink>
               <NavLink
-                to="/"
+                to="/login"
                 className="transform transition duration-500 hover:scale-125"
               >
-                <button onClick={logOutUser}>
-                  <img src={logoutIcon} alt="" className="w-8" />
+                <button
+                  onClick={() => {
+                    logOutUser();
+                  }}
+                >
+                  <img src={logoutIcon} alt="" className="w-8 " />
                 </button>
               </NavLink>
             </div>

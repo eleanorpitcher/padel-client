@@ -8,7 +8,7 @@ function UserProfile() {
   const [user, setUser] = useState("");
   useEffect(() => {
     axios
-      .get(`http://localhost:5005/api/users/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
       .then((oneUser) => {
         setUser(oneUser.data);
       })
@@ -23,14 +23,16 @@ function UserProfile() {
     const uploadData = new FormData();
     uploadData.append("imageUrl", e.target.files[0]);
 
-    axios.post('http://localhost:5005/api/upload', uploadData)
+  
+    axios.post(`${import.meta.env.VITE_API_URL}/api/upload`, uploadData)
+
       .then(response => {
         console.log("Uploaded file URL:", response.data.fileUrl);
         const newProfilePhoto = response.data.fileUrl;
         setImageUrl(newProfilePhoto);  // Update imageUrl state
 
         // Now update the user profile photo in the backend
-        axios.put(`http://localhost:5005/api/users/${id}/photo`, { profilePhoto: newProfilePhoto })
+        axios.put(`${import.meta.env.VITE_API_URL}/api/users/${id}/photo`, { profilePhoto: newProfilePhoto })
           .then(() => {
             // Update local user state to reflect the new profile photo
             setUser(prevUser => ({ ...prevUser, profilePhoto: newProfilePhoto }));

@@ -13,7 +13,7 @@ function AuthProviderWrapper(props) {
 
     if (storedToken) {
       axios
-        .get("http://localhost:5005/auth/verify", {
+        .get(`${import.meta.env.VITE_API_URL}/auth/verify`, {
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then((response) => {
@@ -35,8 +35,8 @@ function AuthProviderWrapper(props) {
   const logOutUser = () => {
     localStorage.removeItem("authToken");
     authenticateUser();
-    setIsLoggedIn(false)
-    console.log('log out')
+    setIsLoggedIn(false);
+    console.log("log out");
   };
 
   useEffect(() => {
@@ -46,7 +46,13 @@ function AuthProviderWrapper(props) {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, isLoading, user, authenticateUser, logOutUser }}
+      value={{
+        isLoggedIn,
+        isLoading,
+        user,
+        authenticateUser,
+        logOutUser,
+      }}
     >
       {props.children}
     </AuthContext.Provider>
