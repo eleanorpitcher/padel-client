@@ -2,7 +2,7 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import arrow from "../assets/icons8-arrow-right-50.png";
 import createEvent from "../assets/Eleanor1.2 (1).png";
@@ -12,6 +12,7 @@ function Homepage() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
   const [players, setPlayers] = useState([]);
   let firstThreePlayers = [];
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -64,11 +65,13 @@ function Homepage() {
           Browse upcoming events, play with friends, and work your way up the
           leaderboard
         </p>
-        <div className="p-10 pb-20">
-          <button className="text-xl text-center p-3 border-2 login-btn">
-            Join Padel4All
-          </button>
-        </div>
+        {!isLoggedIn && (
+          <div className="p-10 pb-20">
+            <button className="text-xl text-center p-3 border-2 login-btn">
+              Join Padel4All
+            </button>
+          </div>
+        )}
       </div>
       <div className="flex flex-col w-full px-20">
         <div className="flex flex-row justify-between items-center">
@@ -101,9 +104,7 @@ function Homepage() {
                 <p>Participants: {event.participants.length}</p>
                 <div className="flex justify-center">
                   <Link to={`/events/${event._id}`}>
-                    <button className="p-3 mt-5 join-btn">
-                      Join
-                    </button>
+                    <button className="p-3 mt-5 join-btn">Join</button>
                   </Link>
                 </div>
               </div>
