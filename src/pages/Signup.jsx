@@ -37,9 +37,9 @@ function Signup() {
   return (
     <div className="flex flex-row text-center justify-around bg-white_color items-center h-screen overflow-hidden -mt-12">
       <div className="flex flex-col  items-center ">
-        <img src="../../public/loginimg.png" alt="" className="w-96" />
+        <img src="../../signupimg.png" alt="" className="w-96" />
         <h1 className="text-olive_color text-6xl font-bold">
-          Together we play better!
+          Welcome to the family!
         </h1>
       </div>
 

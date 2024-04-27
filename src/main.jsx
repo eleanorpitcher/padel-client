@@ -7,10 +7,10 @@ import { AuthProviderWrapper } from "./context/auth.context";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProviderWrapper>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProviderWrapper>
         <App />
-      </BrowserRouter>
-    </AuthProviderWrapper>
+      </AuthProviderWrapper>
+    </BrowserRouter>
   </React.StrictMode>
 );
