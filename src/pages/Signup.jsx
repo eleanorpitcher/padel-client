@@ -100,6 +100,12 @@ function Signup() {
           <hr className="mt-10 mb-6" />
           <h1 className="text-olive_color">Already have an account?</h1>
           {<SlideButtonSU></SlideButtonSU>}
+
+          {error && (
+            <div className="bg-red-800 w-2/4 mx-auto p-2 rounded-lg text-white_color">
+              <h1>{error.response.data.message}</h1>
+            </div>
+          )}
         </form>
       </div>
     </div>
