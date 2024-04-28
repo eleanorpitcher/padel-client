@@ -54,7 +54,7 @@ function UserProfile() {
   return (
     <>
       {user && (
-        <div className="flex flex-col  p-20  w-4/5 mx-auto h-screen ">
+        <div className="flex flex-col  p-20 pb-4  w-4/5 mx-auto h-screen ">
           <div className="flex flex-row items-center">
             <div className="flex flex-col">
               <label
@@ -124,23 +124,49 @@ function UserProfile() {
             )}
           </div>
 
-          <div className="mt-20 flex gap-8 mx-auto ">
-            <div>
-              <h1>Events Played</h1>
+          <div className="mt-20 flex gap-8 mx-auto rounded-md shadow-md pb-12 pl-12 pr-12 pt-6 bg-white bg-opacity-100   ">
+
+            <div className="flex flex-col items-center" >
+              <h1 className="text-4xl font-bold text-green2_color mb-4 ">Events Played</h1>
               {user.gamesPlayed.map((oneEvent) => {
                 console.log(oneEvent);
                 console.log(new Date(oneEvent.date).getTime());
                 console.log(Date.now());
 
                 if (new Date(oneEvent.date).getTime() > Date.now()) {
-                  return <p key={oneEvent._id}>{oneEvent.name}</p>;
+                  return <div key={oneEvent._id}>
+                    {/* <img src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} /> */}
+                    <p>{oneEvent.name}</p> {/* If you want to display the event name */}
+                  </div>
                 } else if (new Date(oneEvent.date).getTime() < Date.now()) {
-                  return <p key={oneEvent._id}>{oneEvent.name}</p>;
+                  return <div key={oneEvent._id}  >
+
+
+                    <div style={{}}
+                      className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative">
+                      <img className="w-full h-full object-cover opacity-40" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
+
+
+
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
+                        <p className="text-4xl ">{oneEvent.name}</p>
+                        <p className="opacity-100 text-green">{oneEvent.date}</p>
+                        <div className=" bg-green2_color p-2 rounded-xl">
+                        <p className="text-white">Score: {oneEvent.results[0].score}</p>
+                        </div>
+
+                      </div>
+
+
+                    </div>
+
+
+                  </div>
                 }
               })}
             </div>
 
-            <h1>Upcoming Events</h1>
+            <h1 className="text-4xl font-bold text-green2_color mb-4 ">Upcoming Events</h1>
           </div>
         </div>
       )}

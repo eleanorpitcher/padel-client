@@ -55,6 +55,10 @@ function AddEvent() {
         <input type="text" onChange={(e) => setDescription(e.target.value)} />
       </div>
       <div>
+        <label>Photo</label>
+        <input type="select" onChange={(e) => setDescription(e.target.value)} />
+      </div>
+      <div>
         <button>Submit event</button>
       </div>
     </form>
