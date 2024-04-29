@@ -51,7 +51,7 @@ function UserProfile() {
       console.error("Error updating description:", err);
     });
   };
- 
+
 
 
 
@@ -149,9 +149,9 @@ function UserProfile() {
           <div className="flex flex-col mx-auto mt-12 rounded-md shadow-md bg-white pr-2 pl-2 bg-opacity-100 w-2/3">
             <div className="flex justify-between w-full">
               <h1 className="text-4xl text-green2_color font-bold opacity-100 pt-2 pl-4">About Me</h1>
-              
-                <img onClick={handleEditToggle} className="w-7 h-7 transition duration-500 transform hover:scale-125 mt-4 mr-7" src={editIcon}/>
-               
+
+              <img onClick={handleEditToggle} className="w-7 h-7 transition duration-500 transform hover:scale-125 mt-4 mr-7" src={editIcon} />
+
             </div>
             {isEditing ? (
               <textarea
@@ -163,7 +163,7 @@ function UserProfile() {
               <p className="text-1xl flex p-4">{user.description || "No description available."}</p>
             )}
             {isEditing && (
-              <img onClick={saveDescription} src={saveIcon} className="w-7 h-7  self-end transition duration-500 transform hover:scale-125 mb-4 mr-4 mt-2"/>
+              <img onClick={saveDescription} src={saveIcon} className="w-7 h-7  self-end transition duration-500 transform hover:scale-125 mb-4 mr-4 mt-2" />
             )}
           </div>
 
@@ -173,70 +173,89 @@ function UserProfile() {
               <h1 className="text-4xl font-bold text-green2_color mb-4">Events Played</h1>
 
               {
+  user.gamesPlayed.length > 0 ? (
+    user.gamesPlayed.map((oneEvent) => {
+      console.log(oneEvent);
+      console.log(new Date(oneEvent.date).getTime());
+      console.log(Date.now());
 
-                user.gamesPlayed.length > 0 ? (user.gamesPlayed.map((oneEvent) => {
-                  console.log(oneEvent);
-                  console.log(new Date(oneEvent.date).getTime());
-                  console.log(Date.now());
+      if (new Date(oneEvent.date).getTime() < Date.now()) {
+        // Find the user's result for the current event
+        const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
 
-                  if (new Date(oneEvent.date).getTime() < Date.now()) {
-                    return <div key={oneEvent._id}  >
+        return (
+          <div key={oneEvent._id}>
 
-                      <Link to={`/events/${oneEvent._id}`}>
-                        <div className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105 ">
-                          <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
-                          <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
-                            <p className="text-4xl ">{oneEvent.name}</p>
-                            <p className="opacity-100 text-green">{oneEvent.date}</p>
-                            <div className=" bg-green2_color p-2 rounded-xl">
-                              <p className="text-white">Score: {oneEvent.results[0].score}</p>
-                            </div>
-
-                          </div>
-                        </div>
-                      </Link>
-
-
+            <Link to={`/events/${oneEvent._id}`}>
+              <div className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105 ">
+                <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
+                  <p className="text-4xl ">{oneEvent.name}</p>
+                  <p className="opacity-100 text-green">{oneEvent.date}</p>
+                  {userResult ? (
+                    <div className="bg-green2_color p-2 rounded-xl">
+                      <p className="text-white">Score: {userResult.score}</p>
                     </div>
-                  }
-                })
-                ) : (
-                  <Link to={`/events`}>
-                  <div className="text-center text-xl text-white font-bold bg-green1_color bg-opacity-90 p-2 rounded-lg  transition duration-500 hover:scale-105">
-                    <p className="text-2xl">No events available</p>
-                    <p className="text-black">Click here to sign up for one</p>
-                  </div>
-                  </Link>
-                )}
+                  ) : (
+                    <p className="text-white">No score recorded</p>
+                  )}
+                </div>
+              </div>
+            </Link>
+
+          </div>
+        );
+      }
+    })
+  ) : (
+    <Link to={`/events`}>
+      <div className="text-center text-xl text-white font-bold bg-green1_color bg-opacity-90 p-2 rounded-lg  transition duration-500 hover:scale-105">
+        <p className="text-2xl">No events available</p>
+        <p className="text-black">Click here to sign up for one</p>
+      </div>
+    </Link>
+  )
+}
             </div>
             <div className="flex flex-col items-center" >
 
               <h1 className="text-4xl font-bold text-green2_color mb-4 ">Upcoming Events</h1>
 
-              {user.gamesPlayed.some((oneEvent) => new Date(oneEvent.date).getTime() > Date.now()) ? (
-                user.gamesPlayed.filter((oneEvent) => new Date(oneEvent.date).getTime() > Date.now())
-                  .map((oneEvent) => (
-                    <div key={oneEvent._id} className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative  transition duration-500 hover:scale-105 ">
-                      <Link to={`/events/${oneEvent._id}`}>
-                      <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
-                        <p className="text-4xl">{oneEvent.name}</p>
-                        <p className="opacity-100 text-green">{oneEvent.date}</p>
-                        <div className="bg-green2_color p-2 rounded-xl">
-                          <p className="text-white">Score: {oneEvent.results[0].score}</p>
+              {
+                user.gamesPlayed.some((oneEvent) => new Date(oneEvent.date).getTime() > Date.now()) ? (
+                  user.gamesPlayed.filter((oneEvent) => new Date(oneEvent.date).getTime() > Date.now())
+                    .map((oneEvent) => {
+              
+                      const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
+
+                      return (
+                        <div key={oneEvent._id} className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
+                          <Link to={`/events/${oneEvent._id}`}>
+                            <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
+                              <p className="text-4xl">{oneEvent.name}</p>
+                              <p className="opacity-100 text-green">{oneEvent.date}</p>
+                              {userResult ? (
+                                <div className="bg-green2_color p-2 rounded-xl">
+                                  <p className="text-white">Score: {userResult.score}</p>
+                                </div>
+                              ) : (
+                                <p className="text-white">Score not found</p>
+                              )}
+                            </div>
+                          </Link>
                         </div>
-                      </div>
-                      </Link>
+                      );
+                    })
+                ) : (
+                  <Link to={`/events`}>
+                    <div className="flex flex-col items-center justify-center text-center text-xl text-white font-bold bg-green1_color bg-opacity-90 w-[500px] h-96 rounded-lg transition duration-500 hover:scale-105">
+                      <p className="text-5xl">No events available</p>
+                      <p className="text-black">Click here to sign up for one</p>
                     </div>
-                  ))
-              ) : (
-                <Link to={`/events`}>
-                <div className="flex flex-col items-center justify-center text-center text-xl text-white font-bold bg-green1_color bg-opacity-90 w-[500px] h-96 rounded-lg transition duration-500 hover:scale-105">
-                  <p className="text-5xl">No events available</p>
-                  <p className="text-black">Click here to sign up for one</p>
-                </div>
-              </Link>
-              )}
+                  </Link>
+                )
+              }
             </div>
           </div>
           <div className="text-white_color">Space</div>
