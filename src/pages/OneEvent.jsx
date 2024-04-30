@@ -13,6 +13,10 @@ function OneEvent() {
   const { id } = useParams();
   const storedToken = localStorage.getItem("authToken");
   const [currentParticipant, setCurrentParticipant] = useState(false);
+  const [message, setMessage] = useState('')
+
+  
+  // console.log(user.username)
 
   useEffect(() => {
     axios
@@ -45,6 +49,25 @@ function OneEvent() {
       });
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const newComment = {
+      // username: user.username,
+      name: user.name,
+      username: user.username,
+      message,
+      event: id
+    };
+    axios.post(`${import.meta.env.VITE_API_URL}/api/comments`, newComment)
+    .then((comment)=>{
+      setEvent(comment.data)
+      console.log(comment)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
   console.log(user)
 
   return (
@@ -60,7 +83,7 @@ function OneEvent() {
             </div>
            
             {currentParticipant ? (
-              <p>You're already signed up for this event!</p>
+              <p className="text-2xl font-bold" style={{color: '#748B75'}}>You're already signed up for this event!</p>
             ) : (
               <button onClick={joinEvent} className="btn-green-3 text-2xl rounded-md px-6">
                 Sign up!
@@ -118,13 +141,45 @@ function OneEvent() {
                     {event.organizer.name}, input the results for this match
                   </h2>
                   <Link to={`/events/${id}/results`}>
-                    <button className={`btn-green-1 py-4 px-6 rounded-lg mb-2 btn-green-3`}>
+                    <button className={`btn-green py-4 px-6 rounded-lg mb-2 btn-green-3`}>
                       Results
                     </button>
                   </Link>
                 </div>
               )}
+
+            <div className="text-left p-10">
+              <h2 className="text-2xl py-3">What do other plays have to say about this event?</h2>
+              
+              {event.comments.map((oneComment)=>{
+                return(
+                <div key={oneComment._id} className="flex items-center mb-2 border border-black rounded-md" style={{backgroundColor: 'white', width: '40%'}}>
+                  <div className="flex-shrink-0 mr-4">
+                    <img src={oneComment.profilePhoto} className="w-20 h-20 rounded-full "/>
+                  </div>
+                  <div className="flex flex-col">
+                      <p className="text-lg">{oneComment.message}</p>
+                      <div className="flex flex-row items-center">
+                        <p className="text-md mr-2"><strong>{oneComment.username}</strong></p>
+                        <p className="text-sm">(@{oneComment.username})</p>
+                      </div>
+                  </div>
+                </div>
+                )
+              })}
+              <h2 className="text-2xl py-3">Add a comment</h2>
+              <form onSubmit={handleSubmit}>
+                {/* <div className="flex flex-row">
+                  <label className="mr-3" htmlFor="">Username</label>
+                  <input type="text" placeholder="Enter your comment" onChange={(e) => setUsername(e.target.value)} />
+                </div> */}
+                <div className="flex flex-row">
+                  <textarea type="text" placeholder="Enter your comment" onChange={(e) => setMessage(e.target.value)} style={{width: '50%', height: '100px'}} className="border border-black rounded-md"/>
+                </div>
+                <button className="btn-green-2 rounded-md py-2 px-4 mt-4">Send</button>
+              </form>
             </div>
+          </div>
             
             {/*event photo*/}
           </div>
