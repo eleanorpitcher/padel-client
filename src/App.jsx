@@ -23,6 +23,7 @@ function App() {
         <Route element={<AllEvents />} path="/events"></Route>
 
         <Route element={<OneEvent />} path="/events/:id"></Route>
+
         <Route
           element={
             <PrivateRoutes>
@@ -31,6 +32,7 @@ function App() {
           }
           path="/new-event"
         ></Route>
+
         <Route
           element={
             <AnonRoutes>
