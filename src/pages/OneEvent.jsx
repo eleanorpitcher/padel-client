@@ -83,7 +83,7 @@ function OneEvent() {
             </div>
            
             {currentParticipant ? (
-              <p>You're already signed up for this event!</p>
+              <p className="text-2xl font-bold" style={{color: '#748B75'}}>You're already signed up for this event!</p>
             ) : (
               <button onClick={joinEvent} className="btn-green-3 text-2xl rounded-md px-6">
                 Sign up!
@@ -141,7 +141,7 @@ function OneEvent() {
                     {event.organizer.name}, input the results for this match
                   </h2>
                   <Link to={`/events/${id}/results`}>
-                    <button className={`btn-green-1 py-4 px-6 rounded-lg mb-2 btn-green-3`}>
+                    <button className={`btn-green py-4 px-6 rounded-lg mb-2 btn-green-3`}>
                       Results
                     </button>
                   </Link>
@@ -153,9 +153,17 @@ function OneEvent() {
               
               {event.comments.map((oneComment)=>{
                 return(
-                <div key={oneComment._id}>
-                  <p>{oneComment.username}</p>
-                  <p>{oneComment.message}</p>
+                <div key={oneComment._id} className="flex items-center mb-2 border border-black rounded-md" style={{backgroundColor: 'white', width: '40%'}}>
+                  <div className="flex-shrink-0 mr-4">
+                    <img src={oneComment.profilePhoto} className="w-20 h-20 rounded-full "/>
+                  </div>
+                  <div className="flex flex-col">
+                      <p className="text-lg">{oneComment.message}</p>
+                      <div className="flex flex-row items-center">
+                        <p className="text-md mr-2"><strong>{oneComment.username}</strong></p>
+                        <p className="text-sm">(@{oneComment.username})</p>
+                      </div>
+                  </div>
                 </div>
                 )
               })}
@@ -166,10 +174,9 @@ function OneEvent() {
                   <input type="text" placeholder="Enter your comment" onChange={(e) => setUsername(e.target.value)} />
                 </div> */}
                 <div className="flex flex-row">
-                  <label className="mr-3" htmlFor="">Comment</label>
-                  <input type="text" placeholder="Enter your comment" onChange={(e) => setMessage(e.target.value)} />
+                  <textarea type="text" placeholder="Enter your comment" onChange={(e) => setMessage(e.target.value)} style={{width: '50%', height: '100px'}} className="border border-black rounded-md"/>
                 </div>
-                <button className="btn-green-2 rounded-md py-2 px-4 mt-4">Submit</button>
+                <button className="btn-green-2 rounded-md py-2 px-4 mt-4">Send</button>
               </form>
             </div>
           </div>
