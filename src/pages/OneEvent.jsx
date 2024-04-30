@@ -13,6 +13,14 @@ function OneEvent() {
   const { id } = useParams();
   const storedToken = localStorage.getItem("authToken");
   const [currentParticipant, setCurrentParticipant] = useState(false);
+  const [comments, setComments] = useState([])
+  const [message, setMessage] = useState('')
+
+  const newComment = {
+    username: user,
+    message
+  };
+  // console.log(user.username)
 
   useEffect(() => {
     axios
@@ -43,6 +51,18 @@ function OneEvent() {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    axios.post(`${import.meta.env.VITE_API_URL}/api/comments`, newComment)
+    .then((comment)=>{
+      setComments(comment)
+      console.log(comment)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }
 
   console.log(user)
@@ -124,7 +144,32 @@ function OneEvent() {
                   </Link>
                 </div>
               )}
+
+            <div className="text-left p-10">
+              <h2 className="text-2xl py-3">What do other plays have to say about this event?</h2>
+              
+              {comments.map((oneComment)=>{
+                return(
+                <div key={oneComment._id}>
+                  <p>{oneComment.username}</p>
+                  <p>{oneComment.message}</p>
+                </div>
+                )
+              })}
+              <h2 className="text-2xl py-3">Add a comment</h2>
+              <form onSubmit={handleSubmit}>
+                {/* <div className="flex flex-row">
+                  <label className="mr-3" htmlFor="">Username</label>
+                  <input type="text" placeholder="Enter your comment" onChange={(e) => setUsername(e.target.value)} />
+                </div> */}
+                <div className="flex flex-row">
+                  <label className="mr-3" htmlFor="">Comment</label>
+                  <input type="text" placeholder="Enter your comment" onChange={(e) => setMessage(e.target.value)} />
+                </div>
+                <button className="btn-green-2 rounded-md py-2 px-4 mt-4">Submit</button>
+              </form>
             </div>
+          </div>
             
             {/*event photo*/}
           </div>
