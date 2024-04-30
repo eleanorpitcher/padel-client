@@ -13,13 +13,9 @@ function OneEvent() {
   const { id } = useParams();
   const storedToken = localStorage.getItem("authToken");
   const [currentParticipant, setCurrentParticipant] = useState(false);
-  const [comments, setComments] = useState([])
   const [message, setMessage] = useState('')
 
-  const newComment = {
-    username: user,
-    message
-  };
+  
   // console.log(user.username)
 
   useEffect(() => {
@@ -55,9 +51,16 @@ function OneEvent() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const newComment = {
+      // username: user.username,
+      name: user.name,
+      username: user.username,
+      message,
+      event: id
+    };
     axios.post(`${import.meta.env.VITE_API_URL}/api/comments`, newComment)
     .then((comment)=>{
-      setComments(comment)
+      setEvent(comment.data)
       console.log(comment)
     })
     .catch((err)=>{
@@ -148,7 +151,7 @@ function OneEvent() {
             <div className="text-left p-10">
               <h2 className="text-2xl py-3">What do other plays have to say about this event?</h2>
               
-              {comments.map((oneComment)=>{
+              {event.comments.map((oneComment)=>{
                 return(
                 <div key={oneComment._id}>
                   <p>{oneComment.username}</p>
