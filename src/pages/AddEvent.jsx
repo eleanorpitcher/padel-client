@@ -74,7 +74,7 @@ function AddEvent() {
         />
       </div>
       <div className="font-semibold text-lg">
-        <label>Photo</label>
+        <label>Choose your event's picture</label>
         <div className="photo-selection flex">
           {photoOptions.map((photoUrl, index) => (
             <img
