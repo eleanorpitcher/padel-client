@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { Link } from "react-router-dom";
 import dateFormat, { masks } from "dateformat";
+import DeleteBtn from '../assets/icons8-delete-48.png'
 
 function OneEvent() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -74,6 +75,16 @@ function OneEvent() {
   }
 
   console.log(user)
+
+  const handleDeleteComment = () => {
+    axios.delete(`${import.meta.env.VITE_API_URL}/api/comments/${id}`)
+    .then((deletedComment)=>{
+      console.log(deletedComment)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
   return (
     <div className="flex" style={{ backgroundColor: "#F5FBEF" }}>
@@ -158,18 +169,24 @@ function OneEvent() {
               
               {event.comments.map((oneComment)=>{
                 return(
-                <div key={oneComment._id} className="flex items-center mb-2 border border-black rounded-md" style={{backgroundColor: 'white', width: '40%'}}>
+                  <div key={oneComment._id} className="flex items-center mb-2 border border-black rounded-md" style={{ backgroundColor: 'white', width: '40%' }}>
                   <div className="flex-shrink-0 mr-4">
-                    <img src={oneComment.profilePhoto} className="w-20 h-20 rounded-full "/>
+                    <img src={oneComment.profilePhoto} className="w-20 h-20 rounded-full" alt="Profile" />
                   </div>
-                  <div className="flex flex-col">
-                      <p className="text-lg">{oneComment.message}</p>
-                      <div className="flex flex-row items-center">
+                  <div className="flex flex-col flex-grow"> 
+                    <p className="text-lg">{oneComment.message}</p>
+                    <div className="flex items-center justify-between">
+                      <div>
                         <p className="text-md mr-2"><strong>{oneComment.username}</strong></p>
                         <p className="text-sm">(@{oneComment.username})</p>
                       </div>
+                      <div className="flex items-center mr-4"> 
+                        <img src={DeleteBtn} alt="Delete" style={{ cursor: 'pointer', height: '25px', verticalAlign: 'middle' }} onClick={handleDeleteComment}/>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                
                 )
               })}
               <h2 className="text-2xl py-3">Add a comment</h2>
