@@ -2,29 +2,63 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import "../UserProfile.css";
-import editIcon from '../../public/icons8-edit-50.png'
-import saveIcon from '../../public/icons8-save-50.png'
+import editIcon from '../../public/icons8-edit-50.png';
+import saveIcon from '../../public/icons8-save-50.png';
 
 function UserProfile() {
   const [imageUrl, setImageUrl] = useState(null);
   const { id } = useParams();
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableDescription, setEditableDescription] = useState("");
-
+  const [uploadError, setUploadError] = useState("");
+  const [rank, setRank] = useState(null);
+  const [pastEvents, setPastEvents] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
-      .then((oneUser) => {
-        setUser(oneUser.data);
-        setEditableDescription(oneUser.data.description || "");
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
+      .then(response => {
+        const oneUser = response.data;
+        setUser(oneUser);
+        setEditableDescription(oneUser.description || "");
+
+        const gamesBeforeToday = oneUser.gamesPlayed.filter(game => 
+          new Date(game.date) < new Date()
+        );
+
+
+   
+        if (gamesBeforeToday.length === 0) {
+          setRank("Not enough games");
+        } else {
+  
+          fetchSortedPlayers().then(sortedPlayers => {
+            const userIndex = sortedPlayers.findIndex(player => player._id === id);
+            if (userIndex !== -1) {
+              setRank(userIndex + 1); 
+            } else {
+              setRank("Not defined");
+            }
+          });
+        }
       })
       .catch((err) => {
-        console.log(err);
+        console.log('Error fetching user:', err);
       });
   }, [id]);
-  //
+
+  const fetchSortedPlayers = () => {
+    return axios.get(`${import.meta.env.VITE_API_URL}/api/users/`)
+      .then((response) => {
+        const allPlayers = response.data.filter(player => player.gamesPlayed.length > 0);
+        return allPlayers.sort((a, b) => b.totalScore - a.totalScore);
+      })
+      .catch((error) => {
+        console.error('Error fetching players:', error);
+        return [];
+      });
+  };
+
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -56,36 +90,62 @@ function UserProfile() {
 
 
   const handleFileUpload = (e) => {
-    console.log("The file to be uploaded is: ", e.target.files[0]);
+    const file = e.target.files[0];
+    console.log("The file to be uploaded is: ", file);
+
+    if (!file) {
+      return; 
+    }
+
+    const validTypes = ['image/jpeg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      setUploadError("Please upload an image in JPG or PNG format.");
+      return;
+    }
+    setUploadError(""); 
+
     const uploadData = new FormData();
-    uploadData.append("imageUrl", e.target.files[0]);
+    uploadData.append("imageUrl", file);
 
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/api/upload`, uploadData)
-
+    axios.post(`${import.meta.env.VITE_API_URL}/api/upload`, uploadData)
       .then((response) => {
         console.log("Uploaded file URL:", response.data.fileUrl);
         const newProfilePhoto = response.data.fileUrl;
-        setImageUrl(newProfilePhoto); // Update imageUrl state
-
-        // Now update the user profile photo in the backend
-        axios
-          .put(`${import.meta.env.VITE_API_URL}/api/users/${id}/photo`, {
-            profilePhoto: newProfilePhoto,
-          })
+        setImageUrl(newProfilePhoto); 
+        axios.put(`${import.meta.env.VITE_API_URL}/api/users/${id}/photo`, { profilePhoto: newProfilePhoto })
           .then(() => {
-            // Update local user state to reflect the new profile photo
-            setUser((prevUser) => ({
+            setUser(prevUser => ({
               ...prevUser,
               profilePhoto: newProfilePhoto,
             }));
           })
-          .catch((err) =>
-            console.log("Error updating user profile photo:", err)
-          );
+          .catch((err) => console.log("Error updating user profile photo:", err));
       })
-      .catch((err) => console.log("Error while uploading the file:", err));
+      .catch((err) => {
+        console.log("Error while uploading the file:", err);
+        setUploadError("Error uploading the file.");
+      });
   };
+
+  useEffect(() => {
+    if (user) {
+      // Filtrar los eventos pasados en el useEffect
+      const filteredEvents = user.gamesPlayed.filter(event => 
+        new Date(event.date).getTime() < Date.now()
+      );
+      setPastEvents(filteredEvents);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch((err) => {
+        console.log('Error fetching user:', err);
+      });
+  }, [id]);
 
   return (
     <>
@@ -93,28 +153,31 @@ function UserProfile() {
         <div className="flex flex-col  p-20 pb-4   w-4/5 mx-auto h-screen ">
           <div className=" flex items-center">
             <div className="flex flex-col">
-              <label
-                htmlFor="profilePhotoInput"
-                className="w-60 h-60 rounded-full border-4 border-white  cursor-pointer "
-              >
+              <label htmlFor="profilePhotoInput" className="w-60 h-60 rounded-full border-4 border-white cursor-pointer ">
                 <input
                   type="file"
                   id="profilePhotoInput"
                   className="hidden"
                   onChange={handleFileUpload}
-                  accept="image/*"
+                  accept="image/jpeg, image/png"
                 />
                 <div className="relative ">
                   <img
                     src={user.profilePhoto || imageUrl}
                     alt="Profile"
-                    className="w-80 h-60 rounded-full  object-cover hover:opacity-50 "
+                    className="w-60 h-60 rounded-full object-cover hover:opacity-50 "
                   />
                   <p className="absolute inset-0 rounded-full bg-white bg-opacity-50 flex items-center justify-center text-black font-bold text-3xl opacity-0 transition-opacity duration-300 hover:opacity-100">
                     Change Photo
                   </p>
                 </div>
               </label>
+
+              {uploadError && (
+                <div className="bg-red-800 w-63 mx-auto p-2 mt-4 text-center rounded-lg text-white_color">
+                  {uploadError}
+                </div>
+              )}
             </div>
             <div className="ml-14">
               <h1 className="text-5xl font-bold whitespace-nowrap">
@@ -141,7 +204,7 @@ function UserProfile() {
 
               <div className="flex flex-col items-center">
                 <h1 className="font-medium opacity-80">Position</h1>
-                <p className="text-5xl mt-4 text-green2_color font-bold">0</p>
+                <p className="text-5xl mt-4 text-green2_color font-bold">{rank}</p>
               </div>
             </div>
           </div>
@@ -169,54 +232,46 @@ function UserProfile() {
 
           <div className="mt-20 flex gap-8 mx-auto rounded-md shadow-md mb-16 pl-12 pb-12 pr-12 pt-6 bg-white bg-opacity-100   ">
 
-            <div className="flex flex-col items-center" >
-              <h1 className="text-4xl font-bold text-green2_color mb-4">Events Played</h1>
 
-              {
-  user.gamesPlayed.length > 0 ? (
-    user.gamesPlayed.map((oneEvent) => {
-      console.log(oneEvent);
-      console.log(new Date(oneEvent.date).getTime());
-      console.log(Date.now());
 
-      if (new Date(oneEvent.date).getTime() < Date.now()) {
-        // Find the user's result for the current event
-        const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
-
-        return (
-          <div key={oneEvent._id}>
-
-            <Link to={`/events/${oneEvent._id}`}>
-              <div className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105 ">
-                <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
-                  <p className="text-4xl ">{oneEvent.name}</p>
-                  <p className="opacity-100 text-green">{oneEvent.date}</p>
-                  {userResult ? (
-                    <div className="bg-green2_color p-2 rounded-xl">
-                      <p className="text-white">Score: {userResult.score}</p>
-                    </div>
-                  ) : (
-                    <p className="text-white">No score recorded</p>
-                  )}
+          <div className="flex flex-col items-center">
+  <h1 className="text-4xl font-bold text-green2_color mb-4">Past Events</h1>
+  {pastEvents.length > 0 ? (
+    pastEvents.map((event) => {
+      // Encontrar el resultado del usuario para el evento actual
+      const userResult = event.results.find(result => result.player.toString() === user._id.toString());
+      return (
+        <Link key={event._id} to={`/events/${event._id}`}>
+          <div className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
+            <img className="w-full h-full object-cover opacity-20" src={event.photo} alt={`Event photo for ${event.name}`} />
+            <div className="absolute inset-0 flex flex-col  text-center items-center justify-center text-black text-xl font-bold z-10">
+              <p className="text-4xl  ">{event.name}</p>
+              <p className="opacity-100 text-green">{event.date}</p>
+              {userResult ? (
+                <div className="bg-green2_color p-2 rounded-xl">
+                  <p className="text-white">Score: {userResult.score}</p>
                 </div>
-              </div>
-            </Link>
-
+              ) : (
+                <div className="bg-green2_color p-2 rounded-xl">
+                  <p className="text-white">No score recorded</p>
+                </div>
+              )}
+            </div>
           </div>
-        );
-      }
+        </Link>
+      );
     })
   ) : (
     <Link to={`/events`}>
-      <div className="text-center text-xl text-white font-bold bg-green1_color bg-opacity-90 p-2 rounded-lg  transition duration-500 hover:scale-105">
-        <p className="text-2xl">No events available</p>
+      <div className="flex flex-col items-center justify-center text-center text-xl text-white font-bold bg-green1_color bg-opacity-90 w-[500px] h-96 rounded-lg transition duration-500 hover:scale-105">
+        <p className="text-5xl">No events available</p>
         <p className="text-black">Click here to sign up for one</p>
       </div>
     </Link>
-  )
-}
-            </div>
+  )}
+</div>
+
+            
             <div className="flex flex-col items-center" >
 
               <h1 className="text-4xl font-bold text-green2_color mb-4 ">Upcoming Events</h1>
@@ -225,14 +280,14 @@ function UserProfile() {
                 user.gamesPlayed.some((oneEvent) => new Date(oneEvent.date).getTime() > Date.now()) ? (
                   user.gamesPlayed.filter((oneEvent) => new Date(oneEvent.date).getTime() > Date.now())
                     .map((oneEvent) => {
-              
+
                       const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
 
                       return (
                         <div key={oneEvent._id} className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
                           <Link to={`/events/${oneEvent._id}`}>
                             <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-black text-xl font-bold z-10">
+                            <div className="absolute inset-0 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
                               <p className="text-4xl">{oneEvent.name}</p>
                               <p className="opacity-100 text-green">{oneEvent.date}</p>
                               {userResult ? (
@@ -240,7 +295,9 @@ function UserProfile() {
                                   <p className="text-white">Score: {userResult.score}</p>
                                 </div>
                               ) : (
-                                <p className="text-white">Score not found</p>
+                                <div className="bg-green2_color p-2 rounded-xl">
+                                  <p className="text-white">No score recorded</p>
+                                  </div>
                               )}
                             </div>
                           </Link>

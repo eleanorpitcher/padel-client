@@ -15,23 +15,15 @@ function Homepage() {
   const currentDate = new Date()
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/events`)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/events`)
       .then((response) => {
-        setEvents(response.data);
-        // const sortedEvents = response.data.sort(
-        //   (a, b) => new Date(b.date) - new Date(a.date)
-        // );
-        const filteredEvents = events
-          ? events.filter((event) => new Date(event.date) > currentDate)
-          : events.filter((event) => new Date(event.date) < currentDate);
-        const sortByDate = (event1, event2) => {
-          const date1 = new Date(event1.date);
-          const date2 = new Date(event2.date);
-          return date1 - date2;
-        }
-      const chronologicalEvents = filteredEvents.sort(sortByDate);
-        setEvents(chronologicalEvents.slice(0, 3));
+        const fetchedEvents = response.data;
+        const filteredEvents = fetchedEvents.filter((event) => 
+          new Date(event.date) > currentDate
+        );
+        const sortByDate = (event1, event2) => new Date(event1.date) - new Date(event2.date);
+        const sortedEvents = filteredEvents.sort(sortByDate);
+        setEvents(sortedEvents.slice(0, 3)); // Assuming you want to show only the first 3
       })
       .catch((error) => {
         console.error("Error fetching events:", error);
