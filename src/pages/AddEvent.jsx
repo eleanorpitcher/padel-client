@@ -16,7 +16,7 @@ function AddEvent() {
     "/public/PE1.png",
     "/public/PE2.png",
     "/public/PE3.png",
-    "/public/PE4.png"
+    "/public/PE4.png",
   ];
 
   const newEvent = {
@@ -25,7 +25,7 @@ function AddEvent() {
     description,
     organizer: user._id,
     participants: [user._id],
-    photo
+    photo,
   };
 
   function handlePhotoSelect(photoUrl) {
@@ -45,20 +45,35 @@ function AddEvent() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center text-center gap-5 mt-5"
+    >
       <div>
-        <label>Name</label>
-        <input type="text" onChange={(e) => setName(e.target.value)} />
+        <label className="font-semibold text-lg">Name</label>
+        <input
+          type="text"
+          onChange={(e) => setName(e.target.value)}
+          className="border-2 border-olive_color_lighter  text-md rounded-lg  block p-2.5 focus:border-olive_color focus:outline-none w-60"
+        />
       </div>
       <div>
-        <label>Date</label>
-        <input type="date" onChange={(e) => setDate(e.target.value)} />
+        <label className="font-semibold text-lg">Date</label>
+        <input
+          type="date"
+          onChange={(e) => setDate(e.target.value)}
+          className="border-2 border-olive_color_lighter  text-md rounded-lg block w-60 p-2.5 focus:border-olive_color focus:outline-none"
+        />
       </div>
       <div>
-        <label>Description</label>
-        <input type="text" onChange={(e) => setDescription(e.target.value)} />
+        <label className="font-semibold text-lg">Description</label>
+        <textarea
+          cols="50"
+          onChange={(e) => setDescription(e.target.value)}
+          className="border-2 border-olive_color_lighter  text-md rounded-lg  block p-2.5 focus:border-olive_color focus:outline-none"
+        />
       </div>
-      <div>
+      <div className="font-semibold text-lg">
         <label>Photo</label>
         <div className="photo-selection flex">
           {photoOptions.map((photoUrl, index) => (
@@ -66,15 +81,25 @@ function AddEvent() {
               key={index}
               src={photoUrl}
               alt={`Event Photo ${index + 1}`}
-              className={`photo-option ${photo === photoUrl ? 'selected' : ''}`}
+              className="rounded-lg"
               onClick={() => handlePhotoSelect(photoUrl)}
-              style={{ width: '100px', margin: '5px', cursor: 'pointer', border: photo === photoUrl ? '2px solid blue' : 'none' }}
+              style={{
+                width: "20em",
+                margin: "5px",
+                cursor: "pointer",
+                border: photo === photoUrl ? "4px solid #A4B7A4" : "none",
+              }}
             />
           ))}
         </div>
       </div>
       <div>
-        <button type="submit">Submit event</button>
+        <button
+          type="submit"
+          className="px-8 py-4 text-xl bg-white_color border-2 border-olive_color rounded-lg text-olive_color font-bold hover:bg-olive_color hover:text-white_color"
+        >
+          Create event
+        </button>
       </div>
     </form>
   );
