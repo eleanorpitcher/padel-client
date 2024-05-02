@@ -15,10 +15,12 @@ function OneEvent() {
   const [currentParticipant, setCurrentParticipant] = useState(false);
   const [message, setMessage] = useState('')
 
+
   
   // console.log(user.username)
 
-  useEffect(() => {
+
+  function getEvent(){
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
       .then((response) => {
@@ -31,6 +33,9 @@ function OneEvent() {
       .catch((err) => {
         console.log(err);
       });
+  }
+  useEffect(() => {
+    getEvent()
   }, [id, user]);
 
   function joinEvent() {
@@ -41,7 +46,7 @@ function OneEvent() {
         { headers: { Authorization: `Bearer ${storedToken}` } }
       )
       .then((updatedEvent) => {
-        setEvent(updatedEvent.data);
+       getEvent();
         console.log("success");
       })
       .catch((err) => {
