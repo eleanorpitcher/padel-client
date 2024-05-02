@@ -250,31 +250,51 @@ function OneEvent() {
                     </div>
                   );
                 })}
-                <h2 className="text-2xl py-3">Add a comment</h2>
-                <form onSubmit={handleSubmit}>
-                  {/* <div className="flex flex-row">
-                  <label className="mr-3" htmlFor="">Username</label>
-                  <input type="text" placeholder="Enter your comment" onChange={(e) => setUsername(e.target.value)} />
-                </div> */}
-                  <div className="flex flex-col">
-                    <textarea
-                      type="text"
-                      placeholder="Enter your comment"
-                      onChange={(e) => setMessage(e.target.value)}
-                      value={message}
-                      style={{ width: "50%", height: "100px" }}
-                      className="border border-black rounded-md"
-                    />
-                    {error && (
-                      <div className="w-1/2 text-center ">
-                        <h1 className="text-red-500 font-bold mt-1">{error}</h1>
+                {isLoggedIn && (
+                  <>
+                    <h2 className="text-2xl py-3">Add a comment</h2>
+                    <form onSubmit={handleSubmit}>
+                      <div className="flex flex-col">
+                        <textarea
+                          type="text"
+                          placeholder="Enter your comment"
+                          onChange={(e) => setMessage(e.target.value)}
+                          value={message}
+                          style={{ width: "50%", height: "100px" }}
+                          className="border border-black rounded-md"
+                        />
+                        {error && (
+                          <div className="w-1/2 text-center ">
+                            <h1 className="text-red-500 font-bold mt-1">
+                              {error}
+                            </h1>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <button className="bg-olive_color hover:text-white_color rounded-md py-2 px-4 mt-1">
-                    Send
-                  </button>
-                </form>
+                      <button className="bg-olive_color hover:text-white_color rounded-md py-2 px-4 mt-1">
+                        Send
+                      </button>
+                    </form>
+                  </>
+                )}
+                {!isLoggedIn && (
+                  <h2>
+                    <Link
+                      to="/login"
+                      className="hover:bg-olive_color hover:text-white_color hover:p-2 rounded-md font-bold"
+                    >
+                      Log in
+                    </Link>{" "}
+                    or{" "}
+                    <Link
+                      to="/signup"
+                      className="hover:bg-olive_color hover:text-white_color hover:p-2 rounded-md font-bold"
+                    >
+                      Sign up
+                    </Link>{" "}
+                    to comment.
+                  </h2>
+                )}
               </div>
             </div>
 
