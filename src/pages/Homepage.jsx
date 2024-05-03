@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import arrow from "../assets/icons8-arrow-right-50.png";
 import createEvent from "../assets/Eleanor1.2 (1).png";
+import ReactPlayer from "react-player";
+import video from '../../public/video.mp4'
 
 function Homepage() {
   const [events, setEvents] = useState([]);
@@ -13,6 +15,8 @@ function Homepage() {
   const [players, setPlayers] = useState([]);
   const navigate = useNavigate();
   const currentDate = new Date()
+
+ 
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/api/events`)
@@ -73,6 +77,35 @@ function Homepage() {
           </div>
         )}
       </div>
+
+      <div 
+     className="flex justify-center items-center  mx-auto relative overflow-hidden mt-7 mb-7"
+     style={{
+      height: `50vh`,  
+       width: "50vw",
+     }}>
+      <video width="1024" height="768" controls>
+  <source src={video} type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
+</div>
+  
+      {/* <div 
+     className="flex justify-center items-center  mx-auto relative overflow-hidden mt-7 mb-7"
+     style={{
+      height: `50vh`,  
+       width: "50vw",
+     }}>
+  <ReactPlayer
+    url="https://www.youtube.com/watch?v=NtnT6r0PlKE"
+    className="react-player"
+    playing
+    width="100%"  // Player will take full width of the container
+    height="100%" // Player will take full height of the container
+    controls={true}
+  />
+</div> */}
+
       <div className="flex flex-col w-full px-20">
         <div className="flex flex-row justify-between items-center">
           <h2 className="text-3xl">Upcoming events. Book now!</h2>
