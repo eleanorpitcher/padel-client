@@ -127,6 +127,7 @@ function OneEvent() {
       });
   };
 
+
   return (
     <div className="flex" style={{ backgroundColor: "#F5FBEF" }}>
       {event && (
@@ -236,7 +237,8 @@ function OneEvent() {
                 <h2 className="text-2xl py-3">
                   {event.organizer.name}, input the results for this match
                 </h2>
-                {user._id === event.organizer._id && (
+
+                {isLoggedIn && user._id === event.organizer._id && (
                   <Link to={`/events/${id}/results`}>
                     <button className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-brown_color text-brown_color font-bold shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:bg-brown_color before:duration-300 hover:text-white_color hover:shadow-olive_color hover:before:h-64 hover:before:-translate-y-32">
                       <span className="relative z-10">Results</span>
@@ -290,7 +292,7 @@ function OneEvent() {
                         </div>
                       ) : (
                         <div className="flex items-center mr-4">
-                          {oneComment.likes.some((like) => like.user.userId === user._id) ? (
+                          {isLoggedIn && oneComment.likes.some((like) => like.user.userId === user._id) ? (
                             <img
                               src={LikeBtnFilled}
                               alt="Unlike"
@@ -376,5 +378,6 @@ function OneEvent() {
     </div>
   );
 }
+
 
 export default OneEvent;
