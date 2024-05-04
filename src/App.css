@@ -1,0 +1,12 @@
+.small-text {
+    font-size: 2rem; /* You can adjust this value as needed */
+    
+  }
+
+  .event-container{
+    position: relative; /* Asegura que los elementos absolutamente posicionados se coloquen correctamente */
+  background-size: cover; /* Ajusta el tamaño de la imagen para que cubra todo el contenedor */
+  background-position: center;
+  background-color: rgba(255, 255, 255, 0.2);
+
+  }

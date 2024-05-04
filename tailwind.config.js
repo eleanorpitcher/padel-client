@@ -2,6 +2,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      
       colors: {
         white_color: "#F5FBEF",
         green1_color: "#92AD94",
