@@ -106,18 +106,25 @@ function OneEvent() {
               {event.organizer.name}
               <br></br>@{event.organizer.username}
             </div>
-
-            {currentParticipant ? (
-              <p className="text-2xl font-bold" style={{ color: "#748B75" }}>
-                You're already signed up for this event!
-              </p>
+            {isLoggedIn ? (
+              currentParticipant ? (
+                <p className="text-2xl font-bold" style={{ color: "#748B75" }}>
+                  You're already signed up for this event!
+                </p>
+              ) : (
+                <button
+                  onClick={joinEvent}
+                  className="btn-green-3 text-2xl rounded-md px-6"
+                >
+                  Sign up!
+                </button>
+              )
             ) : (
-              <button
-                onClick={joinEvent}
-                className="btn-green-3 text-2xl rounded-md px-6"
-              >
-                Sign up!
-              </button>
+              <Link to="/login">
+                <button className="btn-green-3 text-2xl rounded-md px-6 py-6">
+                  Sign up!
+                </button>
+              </Link>
             )}
           </div>
           <div key={event._id}>
@@ -144,21 +151,23 @@ function OneEvent() {
                         Who's participating? ({event.participants.length})
                       </h2>
                       <div>
-                        <ul className="flex flex-row justify-center p-10">
+                        <ul className="flex flex-row flex-wrap justify-center p-10">
                           {event.participants.map((oneParticipant, index) => (
                             <li
                               key={index}
-                              className="flex items-center mx-2 p-5 bg-white text-lg rounded-lg shadow-lg"
+                              className="flex items-center mx-2 my-2 p-5 bg-white text-lg rounded-lg shadow-lg"
                               style={{
                                 backgroundColor: "#E8EDE8",
                                 width: "20%",
                               }}
                             >
-                              <img
-                                src={oneParticipant.profilePhoto}
-                                alt=""
-                                className="w-30 h-20 rounded-full hover:opacity-50"
-                              />
+                              <Link to={`/profile/${oneParticipant._id}`}>
+                                <img
+                                  src={oneParticipant.profilePhoto}
+                                  alt=""
+                                  className="w-30 h-20 rounded-full hover:opacity-50"
+                                />
+                              </Link>
                               <div className="flex-1">
                                 <h3 className="mx-10 text-left font-bold">
                                   {oneParticipant.name}
@@ -193,11 +202,13 @@ function OneEvent() {
                   <h2 className="text-2xl py-3">
                     {event.organizer.name}, input the results for this match
                   </h2>
-                  <Link to={`/events/${id}/results`}>
-                    <button className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-brown_color text-brown_color font-bold shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:bg-brown_color before:duration-300 hover:text-white_color hover:shadow-olive_color hover:before:h-64 hover:before:-translate-y-32">
-                      <span className="relative z-10">Results</span>
-                    </button>
-                  </Link>
+                  {user._id === event.organizer._id && (
+                    <Link to={`/events/${id}/results`}>
+                      <button className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-brown_color text-brown_color font-bold shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:bg-brown_color before:duration-300 hover:text-white_color hover:shadow-olive_color hover:before:h-64 hover:before:-translate-y-32">
+                        <span className="relative z-10">Results</span>
+                      </button>
+                    </Link>
+                  )}
                 </div>
               )}
 
