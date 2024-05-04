@@ -117,7 +117,32 @@ function UserProfile() {
         setUploadError("Error uploading the file.");
       });
   };
-  
+
+  useEffect(() => {
+    if (user) {
+      // Filtrar los eventos pasados en el useEffect
+      const filteredEvents = user.gamesPlayed.filter(event => 
+        new Date(event.date).getTime() < Date.now()
+      );
+      setPastEvents(filteredEvents);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch((err) => {
+        console.log('Error fetching user:', err);
+      });
+  }, [id]);
+
+  const deleteParticipation = () => {
+    axios.delete()
+    console.log('participation deleted!')
+  }
+
   return (
     <>
       {user && (
@@ -270,8 +295,8 @@ function UserProfile() {
                       const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
 
                       return (
-                        <div key={oneEvent._id} className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
-                          <Link to={`/events/${oneEvent._id}`}>
+                        <div key={oneEvent._id} className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
+                          <Link to={`/events/${oneEvent._id}`} className="block w-full h-full">
                             <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
                             <div className="absolute inset-0 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
                               <p className="text-4xl">{oneEvent.name}</p>
@@ -286,8 +311,16 @@ function UserProfile() {
                                 </div>
                               )}
                             </div>
-                          </Link>
+                            </Link>
+                            {/* Positioning the button at the bottom */}
+                            <div className="absolute bottom-0 w-full text-center mb-4">
+                              <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" onClick={deleteParticipation}>
+                                Cancel Participation
+                              </button>
+                            </div>
+                          
                         </div>
+
                       );
                     })
                 ) : (
