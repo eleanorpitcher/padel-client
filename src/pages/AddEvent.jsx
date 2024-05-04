@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 
@@ -11,7 +11,7 @@ function AddEvent() {
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
 
   const photoOptions = [
     "/public/PE1.png",
@@ -41,7 +41,7 @@ function AddEvent() {
         navigate(`/events/${event.data._id}`);
       })
       .catch((err) => {
-        setError(err)
+        setError(err);
         console.log(err);
       });
   }
