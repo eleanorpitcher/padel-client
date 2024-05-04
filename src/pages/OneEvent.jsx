@@ -24,10 +24,13 @@ function OneEvent() {
       .then((response) => {
         const oneEvent = response.data;
         setEvent(oneEvent);
-        const foundParticipant = oneEvent.participants.find(
-          (participant) => participant._id === user._id
-        );
-        setCurrentParticipant(!!foundParticipant);
+        if (user){
+          const foundParticipant = oneEvent.participants.find(
+            (participant) => participant._id === user._id
+          );
+          setCurrentParticipant(!!foundParticipant);
+        }
+        
 
         if (new Date(oneEvent.date) > currentDate) {
           setIsPastEvent(false);
