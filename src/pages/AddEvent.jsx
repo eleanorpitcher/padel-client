@@ -11,6 +11,7 @@ function AddEvent() {
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
+  const [error, setError] = useState(null)
 
   const photoOptions = [
     "/public/PE1.png",
@@ -40,6 +41,7 @@ function AddEvent() {
         navigate(`/events/${event.data._id}`);
       })
       .catch((err) => {
+        setError(err)
         console.log(err);
       });
   }
@@ -101,6 +103,11 @@ function AddEvent() {
           Create event
         </button>
       </div>
+      {error && (
+        <div className="bg-red-800 w-2/4 mx-auto p-2 rounded-lg text-white_color">
+          <h1>{error.response.data.message}</h1>
+        </div>
+      )}
     </form>
   );
 }

@@ -18,8 +18,10 @@ function UserProfile() {
   const [pastEvents, setPastEvents] = useState([]);
   const [gamesBeforeTodayCount, setGamesBeforeTodayCount] = useState(0);
   const { user: loggedInUser } = useContext(AuthContext); // Accessing the logged-in user
+  const storedToken = localStorage.getItem("authToken");
 
-  useEffect(() => {
+
+  function getUser() {
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
       .then(response => {
         const oneUser = response.data;
@@ -35,7 +37,11 @@ function UserProfile() {
       .catch((err) => {
         console.log('Error fetching user:', err);
       });
-  }, [id]);
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [id])
 
   const fetchSortedPlayers = () => {
     return axios.get(`${import.meta.env.VITE_API_URL}/api/users/`)
@@ -118,7 +124,40 @@ function UserProfile() {
         setUploadError("Error uploading the file.");
       });
   };
-  
+
+  useEffect(() => {
+    if (user) {
+      // Filtrar los eventos pasados en el useEffect
+      const filteredEvents = user.gamesPlayed.filter(event => 
+        new Date(event.date).getTime() < Date.now()
+      );
+      setPastEvents(filteredEvents);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
+      .then(response => {
+        setUser(response.data);
+      })
+      .catch((err) => {
+        console.log('Error fetching user:', err);
+      });
+  }, [id]);
+
+  const deleteParticipation = (eventId) => {
+    axios.put(`${import.meta.env.VITE_API_URL}/api/events/${eventId}/leave`,
+    {},
+    { headers: { Authorization: `Bearer ${storedToken}` } })
+    .then((updatedEvent) => {
+      getUser()
+      console.log('Updated event, event deleted successfully', updatedEvent);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   return (
     <>
       {user && (
@@ -231,7 +270,7 @@ function UserProfile() {
                     <Link key={event._id} to={`/events/${event._id}`}>
                       <div className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
                         <img className="w-full h-full object-cover opacity-20" src={event.photo} alt={`Event photo for ${event.name}`} />
-                        <div className="absolute  gap-3  inset-0 flex flex-col  text-center items-center justify-center text-black text-xl font-bold z-10">
+                        <div className="absolute  gap-1  inset-0 flex flex-col  text-center items-center justify-center text-black text-xl font-bold z-10">
                           <p className="text-4xl  ">{event.name}</p>
                           <p className="opacity-100 text-green">{dateFormat(event.date, "fullDate")}</p>
                           {userResult ? (
@@ -271,11 +310,12 @@ function UserProfile() {
                       const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
 
                       return (
-                        <div key={oneEvent._id} className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
-                          <Link to={`/events/${oneEvent._id}`}>
+                        <div key={oneEvent._id}>
+                        <div  className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
+                          <div className="block w-full h-full">
                             <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
-                            <div className="absolute inset-0 gap-3 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
-                              <p className="text-4xl">{oneEvent.name}</p>
+                            <div className="absolute gap-1 inset-0 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
+                              <Link to={`/events/${oneEvent._id}`} ><p className="text-4xl">{oneEvent.name}</p></Link>
                               <p className="opacity-100 text-green">{dateFormat(oneEvent.date, "fullDate")}</p>
                               {userResult ? (
                                 <div className="bg-green2_color p-2 rounded-xl">
@@ -286,10 +326,17 @@ function UserProfile() {
                                   <p className="text-white">No score recorded</p>
                                 </div>
                               )}
+                              <div className="absolute bottom-0 w-full text-center mb-4">
+                                <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" onClick={()=>deleteParticipation(oneEvent._id)}>
+                                  Cancel Participation
+                                </button>
+                              </div>
                             </div>
-                          </Link>
+                          </div>
                         </div>
+                      </div>
                       );
+                      
                     })
                 ) : (
                   <Link to={`/events`}>
