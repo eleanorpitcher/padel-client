@@ -121,19 +121,30 @@ function Homepage() {
           {events.length > 0 ? (
             events.map((event) => (
               <div
-                key={event._id}
-                className="container mb-4 p-4 rounded-md shadow-md"
-                style={{ backgroundColor: "#E8EDE8" }}
-              >
-                <div>
-                  <div className="flex flex-row justify-between">
-                    <h2 className="text-2xl text-left">{event.name}</h2>
-                    <h3 className="pt-1 pl-10 ">
-                      {new Date(event.date).toLocaleDateString()}
-                    </h3>
-                  </div>
+              key={event._id}
+              className="border border-gray-400 shadow-md p-4 rounded-lg relative"
+              style={{
+                backgroundImage: `url(${event.photo})`,
+                backgroundSize: 'cover', 
+                backgroundPosition: 'center'
+              }}
+            >
+             
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.6)', 
+                }}
+              ></div>
+            
+              <div className="relative z-10">
+                <div className="flex flex-row justify-between">
+                  <h2 className="text-2xl text-left">{event.name}</h2>
+                  <h3 className="pt-1 pl-10 ">
+                    {new Date(event.date).toLocaleDateString()}
+                  </h3>
                 </div>
-                <p>{event.description}</p>
+                <p className="h-12">{event.description}</p>
                 <p>Participants: {event.participants.length}</p>
                 <div className="flex justify-center">
                   <Link to={`/events/${event._id}`}>
@@ -141,6 +152,7 @@ function Homepage() {
                   </Link>
                 </div>
               </div>
+            </div>
             ))
           ) : (
             <p>No upcoming events found.</p>

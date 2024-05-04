@@ -5,6 +5,7 @@ import "../UserProfile.css";
 import editIcon from '../../public/icons8-edit-50.png';
 import saveIcon from '../../public/icons8-save-50.png';
 import { AuthContext } from '../context/auth.context.jsx';
+import dateFormat, { masks } from "dateformat";
 
 function UserProfile() {
   const [imageUrl, setImageUrl] = useState(null);
@@ -230,9 +231,9 @@ function UserProfile() {
                     <Link key={event._id} to={`/events/${event._id}`}>
                       <div className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
                         <img className="w-full h-full object-cover opacity-20" src={event.photo} alt={`Event photo for ${event.name}`} />
-                        <div className="absolute inset-0 flex flex-col  text-center items-center justify-center text-black text-xl font-bold z-10">
+                        <div className="absolute  gap-3  inset-0 flex flex-col  text-center items-center justify-center text-black text-xl font-bold z-10">
                           <p className="text-4xl  ">{event.name}</p>
-                          <p className="opacity-100 text-green">{event.date}</p>
+                          <p className="opacity-100 text-green">{dateFormat(event.date, "fullDate")}</p>
                           {userResult ? (
                             <div className="bg-green2_color p-2 rounded-xl">
                               <p className="text-white">Score: {userResult.score}</p>
@@ -273,9 +274,9 @@ function UserProfile() {
                         <div key={oneEvent._id} className="w-[500px] h-96 mb-8 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
                           <Link to={`/events/${oneEvent._id}`}>
                             <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
-                            <div className="absolute inset-0 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
+                            <div className="absolute inset-0 gap-3 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
                               <p className="text-4xl">{oneEvent.name}</p>
-                              <p className="opacity-100 text-green">{oneEvent.date}</p>
+                              <p className="opacity-100 text-green">{dateFormat(oneEvent.date, "fullDate")}</p>
                               {userResult ? (
                                 <div className="bg-green2_color p-2 rounded-xl">
                                   <p className="text-white">Score: {userResult.score}</p>

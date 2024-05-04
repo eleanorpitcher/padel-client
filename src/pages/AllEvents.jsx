@@ -29,7 +29,7 @@ function AllEvents() {
   const sortByYear = (selectedYear) => {
     let filteredEvents;
 
-    if(!upcomingEvents) {
+    if (!upcomingEvents) {
       if (selectedYear === "default") {
         filteredEvents = eventsAll;
       } else {
@@ -57,12 +57,12 @@ function AllEvents() {
       });
   }, []);
 
-  useEffect(()=> {
-    if(upcomingEvents) {
+  useEffect(() => {
+    if (upcomingEvents) {
       setEvents(eventsAll)
     }
-  },[upcomingEvents])
-  
+  }, [upcomingEvents])
+
 
   return (
     <div className="p-4" style={{ backgroundColor: "#F5FBEF" }}>
@@ -74,53 +74,51 @@ function AllEvents() {
           <div className="justify-start">
             <button
               onClick={() => setUpcomingEvents(true)}
-              className={`btn-green-1 px-4 py-2 rounded-lg mb-2 ${
-                !upcomingEvents ? "btn-white" : ""
-              }`}
+              className={`btn-green-1 px-4 py-2 rounded-lg mb-2 ${!upcomingEvents ? "btn-white" : ""
+                }`}
             >
               Upcoming Events
             </button>
             <button
               onClick={() => setUpcomingEvents(false)}
-              className={`btn-green-1 px-4 py-2 rounded-lg mb-2 mx-2 ${
-                upcomingEvents ? "btn-white" : ""
-              }`}
+              className={`btn-green-1 px-4 py-2 rounded-lg mb-2 mx-2 ${upcomingEvents ? "btn-white" : ""
+                }`}
             >
               Past Events
             </button>
           </div>
           <div className="justify-end">
-              <Link to={"/new-event"}>
-                <button
-                  className={`btn-green-3 px-4 py-2 rounded-lg mb-2 mx-20 justify-end`}
-                  style={{ width: "200px" }}
-                > Create New event
-                </button>
-              </Link>
+            <Link to={"/new-event"}>
+              <button
+                className={`btn-green-3 px-4 py-2 rounded-lg mb-2 mx-20 justify-end`}
+                style={{ width: "200px" }}
+              > Create New event
+              </button>
+            </Link>
           </div>
         </div>
         <div className="flex flex-row">
-            {!upcomingEvents && (
-              <div className="year-dropdown">
-                <select
-                  id="dropdownMenu"
-                  onChange={(e) => sortByYear(e.target.value)}
-                  className="text-1xl text-left text-center p-1 border-2 year-btn"
-                >
-                  {years.map((oneYear) => (
-                    <option
-                      key={oneYear.value}
-                      value={oneYear.value}
-                      label={oneYear.label}
-                    >
-                      {oneYear.default}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+          {!upcomingEvents && (
+            <div className="year-dropdown">
+              <select
+                id="dropdownMenu"
+                onChange={(e) => sortByYear(e.target.value)}
+                className="text-1xl text-left text-center p-1 border-2 year-btn"
+              >
+                {years.map((oneYear) => (
+                  <option
+                    key={oneYear.value}
+                    value={oneYear.value}
+                    label={oneYear.label}
+                  >
+                    {oneYear.default}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
-          
+
       </div>
       <div>
         {upcomingEvents && (
@@ -128,27 +126,44 @@ function AllEvents() {
             {chronologicalEvents.map((oneEvent) => {
               return (
                 <div
-                  key={oneEvent._id}
-                  className="border border-gray-400 shadow-md p-4 rounded-lg"
-                >
-                  <h1 className="text-xl font-bold mb-2 text-center">
-                    {oneEvent.name}
-                  </h1>
-                  <h2 className="text-gray-600 mb-2 text-center">
-                    {dateFormat(oneEvent.date, "fullDate")}
-                  </h2>
-                  <p className="text-gray-700 my-3 text-center">
-                    <strong>Participants:</strong>{" "}
-                    {oneEvent.participants.length}
-                  </p>
+  key={oneEvent._id}
+  className="border border-gray-400 shadow-md p-4 rounded-lg relative"
+  style={{
+    backgroundImage: `url(${oneEvent.photo})`,
+  }}
+>
+ 
+  <div
+    className="absolute inset-0"
+    style={{
+      backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+    }}
+  ></div>
 
-                  <p className="text-gray-700 my-5">{oneEvent.description}</p>
-                  <Link to={`/events/${oneEvent._id}`}>
-                    <button className="btn-green-3 px-4 py-2 rounded-lg">
-                      Learn more
-                    </button>
-                  </Link>
-                </div>
+
+  <div className="relative z-10">
+    <h1 className="text-xl font-bold mb-2 text-center">
+      {oneEvent.name}
+    </h1>
+    <h2 className="text-gray-600 mb-2 text-center">
+      {dateFormat(oneEvent.date, "fullDate")}
+    </h2>
+    <p className="text-gray-700 my-3 text-center">
+      <strong>Participants:</strong>{" "}
+      {oneEvent.participants.length}
+    </p>
+
+   
+    <p className="text-gray-700 my-5 h-12">{oneEvent.description}</p>
+
+    
+    <Link to={`/events/${oneEvent._id}`}  >
+      <button className="btn-green-3 px-4 py-2 rounded-lg">
+        Learn more
+      </button>
+    </Link>
+  </div>
+</div>
               );
             })}
           </div>
@@ -159,25 +174,37 @@ function AllEvents() {
               return (
                 <div
                   key={oneEvent._id}
-                  className="border border-gray-400 shadow-md p-4 rounded-lg"
+                  className="border border-gray-400 shadow-md p-4 rounded-lg relative"
+                  style={{
+                    backgroundImage: `url(${oneEvent.photo})`,
+                  }}
                 >
-                  <h1 className="text-xl font-bold mb-2 text-center">
-                    {oneEvent.name}
-                  </h1>
-                  <h2 className="text-gray-600 mb-2 text-center">
-                    {dateFormat(oneEvent.date, "fullDate")}
-                  </h2>
-                  <p className="text-gray-700 my-3 text-center">
-                    <strong>Participants:</strong>{" "}
-                    {oneEvent.participants.length}
-                  </p>
+                  
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                    }}
+                  ></div>
 
-                  <p className="text-gray-700 my-5">{oneEvent.description}</p>
-                  <Link to={`/events/${oneEvent._id}`}>
-                    <button className="btn-green-3 px-4 py-2 rounded-lg">
-                      Learn more
-                    </button>
-                  </Link>
+                  <div className="relative z-10">
+                    <h1 className="text-xl font-bold mb-2 text-center">
+                      {oneEvent.name}
+                    </h1>
+                    <h2 className="text-gray-600 mb-2 text-center">
+                      {dateFormat(oneEvent.date, "fullDate")}
+                    </h2>
+                    <p className="text-gray-700 my-3 text-center">
+                      <strong>Participants:</strong>{" "}
+                      {oneEvent.participants.length}
+                    </p>
+                    <p className="text-gray-700 my-5 h-12">{oneEvent.description}</p>
+                    <Link to={`/events/${oneEvent._id}`}>
+                      <button className="btn-green-3 px-4 py-2 rounded-lg">
+                        Learn more
+                      </button>
+                    </Link>
+                  </div>
                 </div>
               );
             })}
