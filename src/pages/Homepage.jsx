@@ -60,7 +60,7 @@ function Homepage() {
       className="w-full flex flex-col"
       style={{ backgroundColor: "#F5FBEF" }}
     >
-      <div className="flex flex-col p-10">
+      <div className={`flex flex-col  ${isLoggedIn ? 'p-8 pt-1' : 'p-0'}`}>
         <h1 className="text-4xl px-10 pt-10">
           Find and Compete in Americano tournaments at Barcelona's Most Social
           Padel Club
@@ -70,7 +70,7 @@ function Homepage() {
           leaderboard
         </p>
         {!isLoggedIn && (
-          <div className="p-10 pb-20">
+          <div className="p-10 pb-0 ">
             <button className="text-xl text-center p-3 border-2 login-btn">
               Join Padel4All
             </button>
@@ -79,7 +79,7 @@ function Homepage() {
       </div>
 
       <div 
-     className="flex justify-center items-center  mx-auto relative overflow-hidden mt-7 mb-7"
+     className="flex justify-center items-center  mx-auto relative overflow-hidden mt-7 mb-14"
      style={{
       height: `50vh`,  
        width: "50vw",
