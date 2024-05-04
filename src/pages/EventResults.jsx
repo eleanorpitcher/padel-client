@@ -95,7 +95,7 @@ function EventResults() {
                 return (
                   <div
                     key={oneParticipant._id}
-                    className="text-brown_color text-xl mb-2"
+                    className="text-brown_color text-xl mb-2 text-left"
                   >
                     <span className="font-semibold ">
                       {index + 1}. {oneParticipant.name}
