@@ -17,8 +17,10 @@ function UserProfile() {
   const [pastEvents, setPastEvents] = useState([]);
   const [gamesBeforeTodayCount, setGamesBeforeTodayCount] = useState(0);
   const { user: loggedInUser } = useContext(AuthContext); // Accessing the logged-in user
+  const storedToken = localStorage.getItem("authToken");
 
-  useEffect(() => {
+
+  function getUser() {
     axios.get(`${import.meta.env.VITE_API_URL}/api/users/${id}`)
       .then(response => {
         const oneUser = response.data;
@@ -34,7 +36,11 @@ function UserProfile() {
       .catch((err) => {
         console.log('Error fetching user:', err);
       });
-  }, [id]);
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [id, user])
 
   const fetchSortedPlayers = () => {
     return axios.get(`${import.meta.env.VITE_API_URL}/api/users/`)
@@ -138,9 +144,17 @@ function UserProfile() {
       });
   }, [id]);
 
-  const deleteParticipation = () => {
-    axios.delete()
-    console.log('participation deleted!')
+  const deleteParticipation = (eventId) => {
+    axios.put(`${import.meta.env.VITE_API_URL}/api/events/${eventId}/leave`,
+    {},
+    { headers: { Authorization: `Bearer ${storedToken}` } })
+    .then((updatedEvent) => {
+      getUser()
+      console.log('Updated event, event deleted successfully', updatedEvent);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   return (
@@ -295,11 +309,12 @@ function UserProfile() {
                       const userResult = oneEvent.results.find(result => result.player.toString() === user._id.toString());
 
                       return (
-                        <div key={oneEvent._id} className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
-                          <Link to={`/events/${oneEvent._id}`} className="block w-full h-full">
+                        <div key={oneEvent._id}>
+                        <div  className="w-[500px] h-96 mb-12 rounded-2xl overflow-hidden relative transition duration-500 hover:scale-105">
+                          <div className="block w-full h-full">
                             <img className="w-full h-full object-cover opacity-20" src={oneEvent.photo} alt={`Event photo for ${oneEvent.name}`} />
                             <div className="absolute inset-0 flex flex-col text-center items-center justify-center text-black text-xl font-bold z-10">
-                              <p className="text-4xl">{oneEvent.name}</p>
+                              <Link to={`/events/${oneEvent._id}`} ><p className="text-4xl">{oneEvent.name}</p></Link>
                               <p className="opacity-100 text-green">{oneEvent.date}</p>
                               {userResult ? (
                                 <div className="bg-green2_color p-2 rounded-xl">
@@ -310,18 +325,17 @@ function UserProfile() {
                                   <p className="text-white">No score recorded</p>
                                 </div>
                               )}
+                              <div className="absolute bottom-0 w-full text-center mb-4">
+                                <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" onClick={()=>deleteParticipation(oneEvent._id)}>
+                                  Cancel Participation
+                                </button>
+                              </div>
                             </div>
-                            </Link>
-                            {/* Positioning the button at the bottom */}
-                            <div className="absolute bottom-0 w-full text-center mb-4">
-                              <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" onClick={deleteParticipation}>
-                                Cancel Participation
-                              </button>
-                            </div>
-                          
+                          </div>
                         </div>
-
+                      </div>
                       );
+                      
                     })
                 ) : (
                   <Link to={`/events`}>

@@ -7,6 +7,8 @@ import { AuthContext } from "../context/auth.context";
 import { Link } from "react-router-dom";
 import dateFormat, { masks } from "dateformat";
 import DeleteBtn from "../assets/icons8-delete-48.png";
+import LikeBtn from '../assets/icons8-thumbs-60 (1).png'
+import LikeBtnFilled from '../assets/icons8-thumbs-60 (2).png'
 
 function OneEvent() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -16,8 +18,8 @@ function OneEvent() {
   const [currentParticipant, setCurrentParticipant] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
-  // console.log(user.username)
+  const [isPastEvent, setIsPastEvent] = useState(false)
+  const currentDate = new Date()
 
   function getEvent() {
     axios
@@ -30,6 +32,14 @@ function OneEvent() {
         );
         console.log(foundParticipant);
         setCurrentParticipant(!!foundParticipant);
+
+        console.log(oneEvent.date)
+        if (new Date(oneEvent.date) > currentDate){
+          setIsPastEvent(false)
+        }
+        else (
+          setIsPastEvent(true)
+        )
       })
       .catch((err) => {
         console.log(err);
@@ -38,6 +48,7 @@ function OneEvent() {
   useEffect(() => {
     getEvent();
   }, [id, user]);
+  
 
   function joinEvent() {
     axios
@@ -93,6 +104,28 @@ function OneEvent() {
       });
   };
 
+  const handleLikeComment = (commentId, userId) => {
+    axios.put(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}/like`, {userId})
+    .then((likedComment)=>{
+      console.log(likedComment.data)
+      getEvent()
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const handleUnLikeComment = (commentId, userId) => {
+    axios.put(`${import.meta.env.VITE_API_URL}/api/comments/${commentId}/unlike`, {userId})
+    .then((unLikedComment)=>{
+      console.log(unLikedComment.data)
+      getEvent()
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   return (
     <div className="flex" style={{ backgroundColor: "#F5FBEF" }}>
       {event && (
@@ -107,18 +140,20 @@ function OneEvent() {
               <br></br>@{event.organizer.username}
             </div>
 
-            {currentParticipant ? (
+            {isPastEvent ? (
+              <p>This event has already taken place.</p>
+            ) : currentParticipant ? (
               <p className="text-2xl font-bold" style={{ color: "#748B75" }}>
                 You're already signed up for this event!
               </p>
             ) : (
-              <button
-                onClick={joinEvent}
-                className="btn-green-3 text-2xl rounded-md px-6"
-              >
+              <button onClick={joinEvent} className="btn-green-3 text-2xl rounded-md px-6">
                 Sign up!
               </button>
             )}
+
+
+            
           </div>
           <div key={event._id}>
             <div className="flex flex-col text-center">
@@ -243,6 +278,38 @@ function OneEvent() {
                                   handleDeleteComment(oneComment._id);
                                 }}
                               />
+                            </div>
+                          )}
+                          {user.username !== oneComment.username && (
+                            <div className="flex items-center mr-4">
+                              {oneComment.likes.some((like) => like.user.userId === user._id)?(
+                                <img
+                                src={LikeBtnFilled}
+                                alt="Like"
+                                style={{
+                                  cursor: "pointer",
+                                  height: "25px",
+                                  verticalAlign: "middle",
+                                }}
+                                onClick={() => {
+                                  handleUnLikeComment(oneComment._id, user._id);
+                                }}
+                                />
+                              ) : (
+                              <img
+                                src={LikeBtn}
+                                alt="Like"
+                                style={{
+                                  cursor: "pointer",
+                                  height: "25px",
+                                  verticalAlign: "middle",
+                                }}
+                                onClick={() => {
+                                  handleLikeComment(oneComment._id, user._id);
+                                }}
+                              />
+                              )}
+                              {oneComment.likes.length}
                             </div>
                           )}
                         </div>
