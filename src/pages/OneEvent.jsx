@@ -3,8 +3,8 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import dateFormat from "dateformat";
 import DeleteBtn from "../assets/icons8-delete-48.png";
-import LikeBtn from '../assets/icons8-thumbs-60 (1).png'
-import LikeBtnFilled from '../assets/icons8-thumbs-60 (2).png'
+import LikeBtn from "../assets/icons8-thumbs-60 (1).png";
+import LikeBtnFilled from "../assets/icons8-thumbs-60 (2).png";
 import { AuthContext } from "../context/auth.context";
 
 function OneEvent() {
@@ -19,18 +19,21 @@ function OneEvent() {
   const currentDate = new Date();
 
   function getEvent() {
+    console.log(user);
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
       .then((response) => {
         const oneEvent = response.data;
         setEvent(oneEvent);
-        if (user){
+
+        if (user) {
+
           const foundParticipant = oneEvent.participants.find(
             (participant) => participant._id === user._id
           );
           setCurrentParticipant(!!foundParticipant);
         }
-        
+
 
         if (new Date(oneEvent.date) > currentDate) {
           setIsPastEvent(false);
@@ -45,7 +48,7 @@ function OneEvent() {
 
   useEffect(() => {
     getEvent();
-  }, [id, user]);
+  }, [id]);
 
   function joinEvent() {
     axios
@@ -157,7 +160,7 @@ function OneEvent() {
               </button>
             ) : (
               <Link to="/login">
-                <button className="btn-green-3 text-2xl rounded-md px-6">
+                <button className="btn-green-3 text-2xl rounded-md px-6 py-6">
                   Sign up!
                 </button>
               </Link>
@@ -238,7 +241,8 @@ function OneEvent() {
                   {event.organizer.name}, input the results for this match
                 </h2>
 
-                {isLoggedIn && user._id === event.organizer._id && (
+                {user?._id === event.organizer._id && (
+
                   <Link to={`/events/${id}/results`}>
                     <button className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-brown_color text-brown_color font-bold shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:bg-brown_color before:duration-300 hover:text-white_color hover:shadow-olive_color hover:before:h-64 hover:before:-translate-y-32">
                       <span className="relative z-10">Results</span>
@@ -292,7 +296,11 @@ function OneEvent() {
                         </div>
                       ) : (
                         <div className="flex items-center mr-4">
-                          {isLoggedIn && oneComment.likes.some((like) => like.user.userId === user._id) ? (
+
+                          {oneComment.likes.some(
+                            (like) => like.user.userId === user._id
+                          ) ? (
+
                             <img
                               src={LikeBtnFilled}
                               alt="Unlike"
@@ -342,7 +350,9 @@ function OneEvent() {
                       />
                       {error && (
                         <div className="w-1/2 text-center">
-                          <h1 className="text-red-500 font-bold mt-1">{error}</h1>
+                          <h1 className="text-red-500 font-bold mt-1">
+                            {error}
+                          </h1>
                         </div>
                       )}
                     </div>
