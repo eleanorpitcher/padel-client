@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import SlideButton from "../components/SlideButton";
+import loginImg from '/loginimg.png'
 
 function Login() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ function Login() {
   return (
     <div className="flex flex-row text-center justify-around bg-white_color items-center h-screen overflow-hidden -mt-16">
       <div className="flex flex-col  items-center ">
-        <img src="../../public/loginimg.png" alt="" className="w-96" />
+        <img src={loginImg} alt="" className="w-96" />
         <h1 className="text-olive_color text-6xl font-bold">
           Together we play better!
         </h1>

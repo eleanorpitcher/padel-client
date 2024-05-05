@@ -14,10 +14,10 @@ function AddEvent() {
   const [error, setError] = useState(null);
 
   const photoOptions = [
-    "/public/PE1.png",
-    "/public/PE2.png",
-    "/public/PE3.png",
-    "/public/PE4.png",
+    "/PE1.png",
+    "/PE2.png",
+    "/PE3.png",
+    "/PE4.png",
   ];
 
   const newEvent = {
