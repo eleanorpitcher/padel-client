@@ -72,7 +72,9 @@ function AddEvent() {
         <textarea
           cols="50"
           onChange={(e) => setDescription(e.target.value)}
+          placeholder="(Maximum 100 characters)"
           className="border-2 border-olive_color_lighter  text-md rounded-lg  block p-2.5 focus:border-olive_color focus:outline-none"
+          maxLength="100"
         />
       </div>
       <div className="font-semibold text-lg">
