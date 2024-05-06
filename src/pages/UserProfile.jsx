@@ -41,7 +41,7 @@ function UserProfile() {
 
   useEffect(() => {
     getUser()
-  }, [id, user])
+  }, [id])
 
   const fetchSortedPlayers = () => {
     return axios
