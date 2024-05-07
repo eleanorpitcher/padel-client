@@ -120,7 +120,7 @@ function Homepage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-7" style={{minHeight: '300px'}}>
           {events.length > 0 ? (
             events.map((event) => (
               <div
@@ -146,8 +146,8 @@ function Homepage() {
                       {new Date(event.date).toLocaleDateString()}
                     </h3>
                   </div>
-                  <p className="h-12">{event.description}</p>
-                  <p>Participants: {event.participants.length}</p>
+                  <p className="mb-2">{event.description}</p>
+                  <p><strong>Participants:</strong> {event.participants.length}</p>
                   <div className="flex justify-center">
                     <Link to={`/events/${event._id}`}>
                       <button className="p-3 mt-5 join-btn">Join</button>
