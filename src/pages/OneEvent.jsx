@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import dateFormat from "dateformat";
 import DeleteBtn from "../assets/icons8-delete-48.png";
 import LikeBtn from '../assets/icons8-thumbs-up-50.png';
@@ -17,7 +17,39 @@ function OneEvent() {
   const [error, setError] = useState("");
   const [isPastEvent, setIsPastEvent] = useState(false);
   const currentDate = new Date();
+
   const [errorMax, setErrorMax] = useState("");
+
+  const navigate = useNavigate()
+
+  function getEvent() {
+    console.log(user);
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
+      .then((response) => {
+        const oneEvent = response.data;
+        setEvent(oneEvent);
+
+        if (user) {
+
+          const foundParticipant = oneEvent.participants.find(
+            (participant) => participant._id === user._id
+          );
+          setCurrentParticipant(!!foundParticipant);
+        }
+
+
+        if (new Date(oneEvent.date) > currentDate) {
+          setIsPastEvent(false);
+        } else {
+          setIsPastEvent(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
 
   useEffect(() => {
     getEvent();
@@ -102,6 +134,21 @@ function OneEvent() {
     });
   };
 
+
+
+  const deleteEvent = () => {
+    axios.delete(`${import.meta.env.VITE_API_URL}/api/events/${id}`)
+    .then((deletedEvent)=>{
+      console.log(deletedEvent)
+      navigate('/events')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+
+
   return (
     <div className="flex" style={{ backgroundColor: "#F5FBEF" }}>
       {event && (
@@ -158,13 +205,39 @@ function OneEvent() {
                     <div>
                       <ul className="flex flex-row flex-wrap justify-center p-10">
                         {event.participants.map((oneParticipant, index) => (
+
                           <li key={index} className="flex items-center mx-2 my-2 p-5 bg-white text-lg rounded-lg shadow-lg" style={{ backgroundColor: "#E8EDE8", width: "20%" }}>
                             <Link to={`/profile/${oneParticipant._id}`}>
                               <img src={oneParticipant.profilePhoto} alt="" className="w-30 h-20 rounded-full hover:opacity-50" />
+
+                          <li
+                            key={index}
+                            className="flex items-center mx-2 my-2 p-5 bg-white text-lg rounded-lg shadow-lg"
+                            style={{
+                              backgroundColor: "#E8EDE8",
+                              width: "20%",
+                              minWidth: "170px",
+                            }}
+                          >
+                            
+                            <Link to={`/profile/${oneParticipant._id}`}>
+                              <img
+                                src={oneParticipant.profilePhoto}
+                                alt=""
+                                className="participant-image rounded-full hover:opacity-50 mr-5"
+                              />
+
                             </Link>
+                            
                             <div className="flex-1">
-                              <h3 className="mx-10 text-left font-bold">{oneParticipant.name}</h3>
-                              <h3 className="mx-10 text-left">@{oneParticipant.username}</h3>
+
+                              <h3 className="text-left font-bold">
+                                {oneParticipant.name}
+                              </h3>
+                              <h3 className="text-left text-sm">
+                                @{oneParticipant.username}
+                              </h3>
+
                             </div>
                           </li>
                         ))}
@@ -181,14 +254,26 @@ function OneEvent() {
               </div>
             </div>
 
-            {user && user._id === event.organizer._id && (
-              <div className="flex flex-col text-center py-10" style={{ backgroundColor: "#A4B7A4" }}>
-                <h2 className="text-2xl py-3">{event.organizer.name}, input the results for this match</h2>
-                <Link to={`/events/${id}/results`}>
-                  <button className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-brown_color text-brown_color font-bold shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:bg-brown_color before:duration-300 hover:text-white_color hover:shadow-olive_color hover:before:h-64 hover:before:-translate-y-32">
-                    <span className="relative z-10">Results</span>
-                  </button>
-                </Link>
+
+
+            {event && user?._id === event.organizer._id && (
+              <div
+                className="flex flex-col text-center py-10"
+                style={{ backgroundColor: "#A4B7A4" }}
+              >
+                <h2 className="text-2xl py-3">
+                  {event.organizer.name}, input the results for this match
+                </h2>
+
+                {user?._id === event.organizer._id && (
+
+                  <Link to={`/events/${id}/results`}>
+                    <button className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-brown_color text-brown_color font-bold shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:bg-brown_color before:duration-300 hover:text-white_color hover:shadow-olive_color hover:before:h-64 hover:before:-translate-y-32">
+                      <span className="relative z-10">Results</span>
+                    </button>
+                  </Link>
+                )}
+
               </div>
             )}
 
@@ -223,7 +308,9 @@ function OneEvent() {
                     </div>
                   </div>
                 </div>
+                
               ))}
+
 
               {isLoggedIn && (
                 <>
@@ -237,6 +324,12 @@ function OneEvent() {
                   </form>
                 </>
               )}
+              
+              {user?._id === event.organizer._id && 
+              <div className="flex flex-row justify-end">
+                <button className="rounded-md py-4 px-6 mt-1 delete-btn text-lg" onClick={deleteEvent}>Delete Event</button>
+              </div>
+              }
 
               {!isLoggedIn && (
                 <h2>
