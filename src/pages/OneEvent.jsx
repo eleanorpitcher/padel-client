@@ -3,8 +3,8 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import dateFormat from "dateformat";
 import DeleteBtn from "../assets/icons8-delete-48.png";
-import LikeBtn from "../assets/icons8-thumbs-60 (1).png";
-import LikeBtnFilled from "../assets/icons8-thumbs-60 (2).png";
+import LikeBtn from '../assets/icons8-thumbs-up-50.png'
+import LikeBtnFilled from '../assets/icons8-thumbs-up-50 (1).png'
 import { AuthContext } from "../context/auth.context";
 
 function OneEvent() {

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function Scoreboard() {
 
@@ -49,17 +50,22 @@ function Scoreboard() {
                     </thead>
                     <tbody>
                         {players.map((player, index) => (
+
+
                             <tr className={`border-b border-gray-700 ${index === 0 ? 'bg-green-600' : ''}`} key={player.id}>
                                 <td className="px-6 py-4 items-center">
                                     {index + 1}
                                 </td>
+                                <Link to={`/profile/${player._id}`}>
                                 <td scope="row" className="flex items-center px-6 py-4 whitespace-nowrap dark:text-white">
-                                    <img className="w-10 h-10 rounded-full" src={player.profilePhoto} alt={`${player.name} image`} />
+                                    <img className="w-10 h-10 rounded-full hover:scale-105 " src={player.profilePhoto} alt={`${player.name} image`} />
                                     <div className="ps-3">
                                         <div className="text-base font-semibold">{player.name}</div>
                                         <div className="font-normal text-gray-500">@{player.username}</div>
                                     </div>  
                                 </td>
+                                </Link>
+
                                 <td className="px-6 py-4 items-center">
                                     {player.totalScore}
                                 </td>
