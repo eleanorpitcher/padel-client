@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SlideButtonSU from "../components/SlideButtonSU";
 
 function Signup() {
@@ -99,7 +99,7 @@ function Signup() {
 
           <hr className="mt-10 mb-6" />
           <h1 className="text-olive_color">Already have an account?</h1>
-          {<SlideButtonSU></SlideButtonSU>}
+          <Link to='/login'>{<SlideButtonSU></SlideButtonSU>}</Link>
 
           {error && (
             <div className="bg-red-800 w-2/4 mx-auto p-2 rounded-lg text-white_color">
