@@ -216,13 +216,19 @@ function UserProfile() {
                 </label>
               )}
               {(!loggedInUser || user._id !== loggedInUser._id) && (
-                <div className="relative">
-                  <img
-                    src={user.profilePhoto || imageUrl}
-                    alt="Profile"
-                    className="w-60 h-60 rounded-full object-cover"
-                  />
-                </div>
+                 <label
+                 htmlFor="profilePhotoInput"
+                 className="w-60 h-60 rounded-full border-4 border-white"
+               >
+                 <div className="relative">
+                   <img
+                     src={user.profilePhoto || imageUrl}
+                     alt="Profile"
+                     className="w-60 h-60 rounded-full object-cover "
+                   />
+                  
+                 </div>
+               </label>
               )}
               {uploadError && loggedInUser && user._id === loggedInUser._id && (
                 <div className="bg-red-800 w-63 mx-auto p-2 mt-4 text-center rounded-lg text-white_color">
