@@ -120,7 +120,10 @@ function Homepage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-7" style={{minHeight: '300px'}}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-7"
+          style={{ minHeight: "300px" }}
+        >
           {events.length > 0 ? (
             events.map((event) => (
               <div
@@ -147,7 +150,9 @@ function Homepage() {
                     </h3>
                   </div>
                   <p className="mb-2">{event.description}</p>
-                  <p><strong>Participants:</strong> {event.participants.length}</p>
+                  <p>
+                    <strong>Participants:</strong> {event.participants.length}
+                  </p>
                   <div className="flex justify-center">
                     <Link to={`/events/${event._id}`}>
                       <button className="p-3 mt-5 join-btn">Join</button>
@@ -200,14 +205,16 @@ function Homepage() {
                 {players.map((player, index) => (
                   <tr
                     className={`border-b border-gray-700 ${
-                      index === 0 ? "bg-green-600" : ""
+                      index === 0
+                        ? "bg-green-600 text-white_color"
+                        : "text-black"
                     }`}
                     key={player.id}
                   >
                     <td className="px-6 py-4 items-center">{index + 1}</td>
                     <td
                       scope="row"
-                      className="flex items-center px-6 py-4 whitespace-nowrap dark:text-white"
+                      className="flex items-center px-6 py-4 whitespace-nowrap "
                     >
                       <img
                         className="w-10 h-10 rounded-full"
