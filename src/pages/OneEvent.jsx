@@ -16,8 +16,10 @@ function OneEvent() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isPastEvent, setIsPastEvent] = useState(false);
+  const [errorMax, setErrorMax]= useState("")
   const currentDate = new Date();
   const navigate = useNavigate()
+
 
   function getEvent() {
     console.log(user);
@@ -52,6 +54,12 @@ function OneEvent() {
   }, [id]);
 
   function joinEvent() {
+
+    if(event.participants.length >= 8){
+      setErrorMax("Sorry Americano is full, Only 8 players per Americano. Check out our other tournaments")
+      return
+    }
+
     axios
       .put(
         `${import.meta.env.VITE_API_URL}/api/events/${id}/join`,
@@ -178,6 +186,14 @@ function OneEvent() {
               </Link>
             )}
           </div>
+
+          {errorMax && (
+  <div className="flex items-center justify-center mx-auto">
+    <p className="text-red-500 font-bold bg-white p-2 rounded-xl transform translate-x-5">
+      {errorMax}
+    </p>
+  </div>
+)}
 
           <div className="flex flex-col text-center" key={event._id}>
             <h1 className="text-6xl pt-10 pb-5 font-bold">{event.name}</h1>
